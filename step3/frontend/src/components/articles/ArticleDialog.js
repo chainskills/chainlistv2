@@ -13,16 +13,20 @@ const ArticleDialog = ({
 	handleCloseDialog,
 	handleSaveDialog,
 }) => {
+
+	// state variable used to kee the information about the article
 	const [article, setArticle] = useState({
 		name: "",
 		description: "",
 		price: "0",
-		owner: null,
 	});
+
+	// state variable used to display error messages
 	const [errorName, setErrorName] = useState(false);
 	const [errorDescription, setErrorDescription] = useState(false);
 	const [errorPrice, setErrorPrice] = useState(false);
 
+	// function called each time we change a value
 	const onChange = (e) => {
 		setArticle({
 			...article,
@@ -30,6 +34,7 @@ const ArticleDialog = ({
 		});
 	};
 
+	// function called when we click on the Save button
 	const handleSave = () => {
 		let error = false;
 
@@ -57,6 +62,7 @@ const ArticleDialog = ({
 		}
 	};
 
+	// called when we cancel changes
 	const handleCancel = () => {
 		handleCloseDialog(false);
 	};

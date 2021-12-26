@@ -7,23 +7,15 @@ import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles((theme) => ({
-	root: {
-		"& > *": {
-			margin: theme.spacing(1),
-		},
-	},
 	card: {
 		height: "100%",
 		display: "flex",
 		flexDirection: "column",
 	},
-	cardMedia: {
-		paddingTop: "56.25%", // 16:9
-	},
 	cardContent: {
 		flexGrow: 1,
 	},
-	pos: {
+	position: {
 		marginBottom: 12,
 	},
 }));
@@ -39,13 +31,17 @@ const ArticleCard = ({ article }) => {
 						{article.name}
 					</Typography>
 					<Typography
-						className={classes.pos}
+						className={classes.position}
 						color="textSecondary"
 						component="h3"
 					>
 						{article.price} ETH
 					</Typography>
-					<Typography className={classes.pos} variant="body2" component="p">
+					<Typography
+						className={classes.position}
+						variant="body2"
+						component="p"
+					>
 						{article.description}
 					</Typography>
 				</CardContent>

@@ -1,14 +1,13 @@
 import React, { useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
-import { makeStyles } from "@material-ui/core/styles";
 import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
 import ArticleDialog from "./ArticleDialog";
 import ArticleCard from "./ArticleCard";
 
+// define the styles of our component
 const useStyles = makeStyles((theme) => ({
 	cardGrid: {
 		paddingTop: theme.spacing(8),
@@ -40,38 +39,22 @@ const Articles = () => {
 		price: 0,
 	});
 
+	// flag used to display or hide the modal dialog box
 	const [isOpen, setIsOpen] = useState(false);
 
-	const [selectedTab, setSelectedTab] = React.useState(0);
-
-	const handleChangeSelector = async (event, newSelection) => {
-		setSelectedTab(newSelection);
-	};
-
-	const onSellArticle = async (_article) => {
-		setArticle(_article);
-	};
-
+	// manage the display of the dialog box
 	const handleOpen = () => {
 		setIsOpen(!isOpen);
+	};
+
+	// called when we add the article to be sold
+	const onSellArticle = async (_article) => {
+		setArticle(_article);
 	};
 
 	return (
 		<div>
 			<div>
-				<Container className={classes.container}>
-					<Tabs
-						value={selectedTab}
-						onChange={handleChangeSelector}
-						indicatorColor="primary"
-						textColor="primary"
-						centered
-					>
-						<Tab label="Marketplace" />
-						<Tab label="My Articles" />
-					</Tabs>
-				</Container>
-
 				<Container className={classes.cardGrid} maxWidth="md">
 					<Fab
 						aria-label="Add"
