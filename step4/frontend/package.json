@@ -12,11 +12,6 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "chrome": "BROWSER='google chrome' react-scripts start",
-    "firefox": "BROWSER=firefox react-scripts start",
-    "brave": "BROWSER='brave browser' react-scripts start",
-    "safari": "BROWSER=safari react-scripts start",
-    "edge": "BROWSER='microsoft edge' react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
