@@ -6,6 +6,8 @@ import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import ArticleDialog from "./ArticleDialog";
 import ArticleCard from "./ArticleCard";
+import { useStore } from "context/StoreProvider";
+import { sellArticle } from "context/web3Actions";
 
 // define the styles of our component
 const useStyles = makeStyles((theme) => ({
@@ -33,11 +35,7 @@ const useStyles = makeStyles((theme) => ({
 const Articles = () => {
 	const classes = useStyles();
 
-	const [article, setArticle] = useState({
-		name: "",
-		description: "",
-		price: 0,
-	});
+	const [state, dispatch] = useStore();
 
 	// flag used to display or hide the modal dialog box
 	const [isOpen, setIsOpen] = useState(false);
@@ -49,7 +47,7 @@ const Articles = () => {
 
 	// called when we add the article to be sold
 	const onSellArticle = async (_article) => {
-		setArticle(_article);
+		await sellArticle(state, dispatch, _article);
 	};
 
 	return (
@@ -71,9 +69,13 @@ const Articles = () => {
 						handleSaveDialog={onSellArticle}
 					/>
 
-					{article.name !== "" && (
+					{state.articleName !== "" && (
 						<Grid container spacing={4}>
-							<ArticleCard article={article} />
+							<ArticleCard
+								name={state.articleName}
+								description={state.articleDescription}
+								price={state.articlePrice}
+							/>
 						</Grid>
 					)}
 				</Container>
