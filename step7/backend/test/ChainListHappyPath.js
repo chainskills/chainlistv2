@@ -47,6 +47,25 @@ describe("ChainList - Happy Path", function () {
     // wait for the transaction to complete
     const receipt = await transaction.wait();
 
+    // check if the appropriate event has been emitted
+    expect(receipt.events.length).to.equal(1);
+    expect(
+      receipt.events[0].event,
+      "event should be SellArticleEvent"
+    ).to.equal("SellArticleEvent");
+    expect(
+      receipt.events[0].args._seller,
+      "seller must be " + seller.address
+    ).to.equal(seller.address);
+    expect(
+      receipt.events[0].args._name,
+      "article name must be " + articleName1
+    ).to.equal(articleName1);
+    expect(
+      receipt.events[0].args._price.toString(),
+      "article price must be " + articlePrice1 + " ETH"
+    ).to.equal(ethers.utils.parseEther(articlePrice1.toString()));
+
     // check the article
     const article = await chainListInstance.getArticle();
     expect(article._name, "article name must be " + articleName1).to.equal(

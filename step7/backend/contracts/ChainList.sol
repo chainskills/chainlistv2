@@ -8,6 +8,13 @@ contract ChainList {
     string description;
     uint256 price;
 
+    // Events
+    event SellArticleEvent(
+        address indexed _seller,
+        string _name,
+        uint256 _price
+    );
+
     // sell a new article
     function sellArticle(
         string memory _name,
@@ -18,6 +25,9 @@ contract ChainList {
         name = _name;
         description = _description;
         price = _price;
+
+        // trigger the event to inform that a new article is for sale
+        emit SellArticleEvent(msg.sender, _name, _price);
     }
 
     // get the article
