@@ -4,10 +4,17 @@ import {
 	WEB3_CONNECT,
 	WEB3_DISCONNECT,
 	GET_ARTICLE,
-	ARTICLE_SAVED,
+	SHOW_EVENTS,
+	INCOMING_EVENT,
+	RELOAD_ARTICLES,
 } from "context/types";
 
 export const setupWeb3 = async (state, dispatch) => {
+	if (state.contract !== null) {
+		// remove previous listeners
+		removeAllListeners(state.contract);
+	}
+
 	if (typeof window.ethereum !== "undefined") {
 		dispatch(await connectWeb3());
 
@@ -23,7 +30,7 @@ export const setupWeb3 = async (state, dispatch) => {
 
 		window.ethereum.on("disconnect", async (code, reason) => {
 			// Subscribe to session disconnection
-			dispatch(await disconnectWeb3());
+			dispatch(await disconnectWeb3(state));
 		});
 	} else {
 		console.error("Metamask is not installed!");
@@ -62,11 +69,52 @@ const connectWeb3 = async () => {
 	};
 };
 
-const disconnectWeb3 = async () => {
+const disconnectWeb3 = async (state) => {
+	if (state.contract !== null) {
+		// remove previous listeners
+		removeAllListeners(state.contract);
+	}
+
 	// update the state
 	return {
 		type: WEB3_DISCONNECT,
 	};
+};
+
+export const addAllListeners = (state, dispatch) => {
+	try {
+		state.contract.on("SellArticleEvent", async (_seller, _name, _price) => {
+			let eventMessage = "";
+			if (state.address === _seller) {
+				eventMessage =
+					"Your article  " + _name + " is available in the marketplace";
+			} else {
+				eventMessage =
+					"The article  " +
+					_name +
+					" is available in the marketplace for " +
+					ethers.utils.formatEther(_price) +
+					" ETH ";
+			}
+			dispatch({
+				type: INCOMING_EVENT,
+				eventMessage: eventMessage,
+				eventTimeStamp: new Date(),
+			});
+			await reloadArticles(dispatch);
+		});
+	} catch (error) {
+		console.log(error);
+	}
+};
+
+const removeAllListeners = (contract) => {
+	// any existing contract?
+	if (contract === null || typeof contract === "undefined") {
+		return;
+	}
+	// remove all events
+	contract.removeAllListeners("SellArticleEvent");
 };
 
 const chainSettings = (chainId) => {
@@ -110,6 +158,12 @@ const chainSettings = (chainId) => {
 	}
 };
 
+export const reloadArticles = async (dispatch) => {
+	dispatch({
+		type: RELOAD_ARTICLES,
+	});
+};
+
 export const sellArticle = async (state, dispatch, article) => {
 	if (state.contract !== null) {
 		try {
@@ -119,10 +173,7 @@ export const sellArticle = async (state, dispatch, article) => {
 				ethers.utils.parseUnits(article.price, "ether")
 			);
 			await transaction.wait();
-
-			dispatch({
-				type: ARTICLE_SAVED,
-			});
+			await reloadArticles(dispatch);
 		} catch (error) {
 			console.error(error);
 		}
@@ -152,4 +203,18 @@ export const getArticle = async (state, dispatch) => {
 			});
 		}
 	}
+};
+
+export const showEvents = (state, dispatch) => {
+	dispatch({
+		type: SHOW_EVENTS,
+		showEvents: true,
+	});
+};
+
+export const hideEvents = (state, dispatch) => {
+	dispatch({
+		type: SHOW_EVENTS,
+		showEvents: false,
+	});
 };

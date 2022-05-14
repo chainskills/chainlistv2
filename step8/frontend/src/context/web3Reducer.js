@@ -3,7 +3,9 @@ import {
 	WEB3_CONNECT,
 	WEB3_DISCONNECT,
 	GET_ARTICLE,
-	ARTICLE_SAVED,
+	RELOAD_ARTICLES,
+	SHOW_EVENTS,
+	INCOMING_EVENT,
 } from "context/types";
 
 export const initialState = {
@@ -18,6 +20,10 @@ export const initialState = {
 	articleDescription: "",
 	articlePrice: 0,
 	refreshTimeStamp: null,
+	eventMessage: "",
+	showEvents: false,
+	eventTimeStamp: null,
+	connected: false,
 };
 
 export const web3Reducer = (state = initialState, action) => {
@@ -33,6 +39,7 @@ export const web3Reducer = (state = initialState, action) => {
 				name: action.name,
 				allowed: action.allowed,
 				refreshTimeStamp: new Date(),
+				connected: true,
 			};
 		case WEB3_DISCONNECT:
 			return {
@@ -47,10 +54,21 @@ export const web3Reducer = (state = initialState, action) => {
 				articleDescription: action.description,
 				articlePrice: action.price,
 			};
-		case ARTICLE_SAVED:
+		case RELOAD_ARTICLES:
 			return {
 				...state,
 				refreshTimeStamp: new Date(),
+			};
+		case INCOMING_EVENT:
+			return {
+				...state,
+				eventMessage: action.eventMessage,
+				eventTimeStamp: action.eventTimeStamp,
+			};
+		case SHOW_EVENTS:
+			return {
+				...state,
+				showEvents: action.showEvents,
 			};
 		default:
 			return state;
