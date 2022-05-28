@@ -21,7 +21,7 @@ export const initialState = {
 	articlePrice: 0,
 	refreshTimeStamp: null,
 	eventMessage: "",
-	showEvents: false,
+	showEvents: true,
 	eventTimeStamp: null,
 	connected: false,
 };

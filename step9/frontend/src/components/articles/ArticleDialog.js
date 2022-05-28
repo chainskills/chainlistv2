@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import {
+	Button,
+	TextField,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogTitle,
+} from "@mui/material";
 import NumberFormatCustom from "utils/NumberFormatCustom";
 
 const ArticleDialog = ({
@@ -13,7 +15,6 @@ const ArticleDialog = ({
 	handleCloseDialog,
 	handleSaveDialog,
 }) => {
-
 	// state variable used to kee the information about the article
 	const [article, setArticle] = useState({
 		name: "",
@@ -69,12 +70,8 @@ const ArticleDialog = ({
 
 	return (
 		<div>
-			<Dialog
-				open={isDialogOpened}
-				onClose={handleCancel}
-				aria-labelledby="article-dialog"
-			>
-				<DialogTitle id="article-dialog">Article</DialogTitle>
+			<Dialog open={isDialogOpened} onClose={handleCancel}>
+				<DialogTitle>Article</DialogTitle>
 				<DialogContent>
 					<TextField
 						error={errorName}
@@ -85,6 +82,7 @@ const ArticleDialog = ({
 						value={article.name}
 						label="Enter the name of the article"
 						fullWidth
+						variant="standard"
 						onChange={onChange}
 					/>
 					<TextField
@@ -95,6 +93,7 @@ const ArticleDialog = ({
 						value={article.description}
 						label="Enter the description of the article"
 						fullWidth
+						variant="standard"
 						onChange={onChange}
 					/>
 					<TextField
@@ -106,6 +105,7 @@ const ArticleDialog = ({
 						value={article.price}
 						onChange={onChange}
 						name="price"
+						variant="standard"
 						InputProps={{
 							inputComponent: NumberFormatCustom,
 						}}

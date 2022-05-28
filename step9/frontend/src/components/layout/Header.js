@@ -1,30 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
-import Typography from "@material-ui/core/Typography";
-import StorefrontIcon from "@material-ui/icons/Storefront";
+import {
+	AppBar,
+	Toolbar,
+	FormGroup,
+	FormControlLabel,
+	Switch,
+	Typography,
+} from "@mui/material";
+import StorefrontIcon from "@mui/icons-material/Storefront";
 import { useStore } from "context/StoreProvider";
 import { showEvents, hideEvents } from "context/web3Actions";
 
-const useStyles = makeStyles((theme) => ({
-	root: {
-		flexGrow: 1,
-	},
-	title: {
-		flexGrow: 1,
-	},
-	icon: {
-		marginRight: theme.spacing(2),
-	},
-}));
-
 const Header = () => {
-	const classes = useStyles();
-
 	const [state, dispatch] = useStore();
 	const [showEventsStatus, setShowEventsStatus] = useState(false);
 
@@ -42,11 +29,21 @@ const Header = () => {
 	};
 
 	return (
-		<div className={classes.root}>
-			<AppBar position="static">
+		<div>
+			<AppBar osition="relative">
 				<Toolbar>
-					<StorefrontIcon edge="start" className={classes.icon} />
-					<Typography variant="h6" className={classes.title}>
+					<StorefrontIcon
+						edge="start"
+						sx={{
+							marginRight: 2,
+						}}
+					/>
+					<Typography
+						variant="h6"
+						sx={{
+							flexGrow: 1,
+						}}
+					>
 						ChainList
 					</Typography>
 					<FormGroup>

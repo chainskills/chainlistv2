@@ -1,6 +1,6 @@
 import { forwardRef, useEffect, useState } from "react";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
+import { Snackbar } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
 import { useStore } from "context/StoreProvider";
 import { reloadArticles } from "context/web3Actions";
 
