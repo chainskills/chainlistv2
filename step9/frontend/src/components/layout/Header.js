@@ -13,7 +13,7 @@ import { showEvents, hideEvents } from "context/web3Actions";
 
 const Header = () => {
 	const [state, dispatch] = useStore();
-	const [showEventsStatus, setShowEventsStatus] = useState(false);
+	const [showEventsStatus, setShowEventsStatus] = useState(true);
 
 	useEffect(() => {
 		if (showEventsStatus) {
@@ -30,7 +30,7 @@ const Header = () => {
 
 	return (
 		<div>
-			<AppBar osition="relative">
+			<AppBar>
 				<Toolbar>
 					<StorefrontIcon
 						edge="start"
@@ -48,7 +48,13 @@ const Header = () => {
 					</Typography>
 					<FormGroup>
 						<FormControlLabel
-							control={<Switch color="secondary" onChange={handleChange} />}
+							control={
+								<Switch
+									color="secondary"
+									onChange={handleChange}
+									checked={state.showEvents}
+								/>
+							}
 							label="Show Events"
 						/>
 					</FormGroup>
