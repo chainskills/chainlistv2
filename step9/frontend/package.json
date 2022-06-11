@@ -5,14 +5,14 @@
 	"dependencies": {
 		"@emotion/react": "^11.9.0",
 		"@emotion/styled": "^11.8.1",
-		"@mui/icons-material": "^5.8.0",
-		"@mui/material": "^5.8.1",
-		"@mui/system": "^5.8.1",
+		"@mui/icons-material": "^5.8.3",
+		"@mui/material": "^5.8.3",
+		"@mui/system": "^5.8.3",
 		"dotenv": "^16.0.1",
 		"ethers": "^5.6.8",
 		"react": "^18.1.0",
 		"react-dom": "^18.1.0",
-		"react-jazzicon": "1.0.3",
+		"react-jazzicon": "1.0.4",
 		"react-number-format": "^4.9.3",
 		"react-scripts": "5.0.1"
 	},
