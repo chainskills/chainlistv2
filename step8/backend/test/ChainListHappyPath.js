@@ -6,8 +6,8 @@ use(solidity);
 
 describe("ChainList - Happy Path", function () {
   let chainListInstance;
-  let owner;
-  let seller;
+  let contractOwner;
+  let articleOwner;
   const articleName1 = "article 1";
   const articleDescription1 = "Description for article 1";
   const articlePrice1 = 0.5;
@@ -16,13 +16,13 @@ describe("ChainList - Happy Path", function () {
     const ChainList = await ethers.getContractFactory("ChainList");
     chainListInstance = await ChainList.deploy();
     await chainListInstance.deployed();
-    [owner, seller] = await ethers.getSigners();
+    [contractOwner, articleOwner] = await ethers.getSigners();
   });
 
   it("should be initialized with empty values", async () => {
     const article = await chainListInstance.getArticle();
 
-    expect(article._seller, "seller must be empty").to.equal(
+    expect(article._owner, "owner must be empty").to.equal(
       ethers.constants.AddressZero
     );
     expect(article._name, "article's name must be empty").to.equal("");
@@ -37,7 +37,7 @@ describe("ChainList - Happy Path", function () {
 
   it("should let us sell an article", async () => {
     const transaction = await chainListInstance
-      .connect(seller)
+      .connect(articleOwner)
       .sellArticle(
         articleName1,
         articleDescription1,
@@ -55,8 +55,8 @@ describe("ChainList - Happy Path", function () {
     ).to.equal("SellArticleEvent");
     expect(
       receipt.events[0].args._seller,
-      "seller must be " + seller.address
-    ).to.equal(seller.address);
+      "seller must be " + articleOwner.address
+    ).to.equal(articleOwner.address);
     expect(
       receipt.events[0].args._name,
       "article name must be " + articleName1
