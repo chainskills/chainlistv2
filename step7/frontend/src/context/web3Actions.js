@@ -132,11 +132,11 @@ export const sellArticle = async (state, dispatch, article) => {
 export const getArticle = async (state, dispatch) => {
 	if (state.contract !== null && state.address !== null) {
 		try {
-			const [_seller, _name, _description, _price] =
+			const [_owner, _name, _description, _price] =
 				await state.contract.getArticle();
 			dispatch({
 				type: GET_ARTICLE,
-				seller: _seller,
+				seller: _owner,
 				name: _name,
 				description: _description,
 				price: ethers.utils.formatEther(_price),
