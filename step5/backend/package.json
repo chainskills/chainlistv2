@@ -4,13 +4,13 @@
 	"main": "index.js",
 	"license": "MIT",
 	"devDependencies": {
-		"@nomiclabs/hardhat-ethers": "^2.0.5",
+		"@nomiclabs/hardhat-ethers": "^2.0.6",
 		"@nomiclabs/hardhat-waffle": "^2.0.3",
 		"chai": "^4.3.6",
-		"ethereum-waffle": "^4.0.0-alpha.0",
-		"ethers": "^5.6.0",
-		"hardhat": "^2.9.1",
-		"prettier": "^2.5.0",
+		"ethereum-waffle": "^3.4.4",
+		"ethers": "^5.6.8",
+		"hardhat": "^2.9.9",
+		"prettier": "^2.6.2",
 		"prettier-plugin-solidity": "^1.0.0-beta.19"
 	}
 }
