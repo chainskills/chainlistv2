@@ -3,7 +3,7 @@ pragma solidity >=0.8.0 <0.9.0;
 
 contract ChainList {
     // State variables
-    address payable seller;
+    address payable owner;
     string name;
     string description;
     uint256 price;
@@ -14,7 +14,7 @@ contract ChainList {
         string memory _description,
         uint256 _price
     ) public {
-        seller = payable(msg.sender);
+        owner = payable(msg.sender);
         name = _name;
         description = _description;
         price = _price;
@@ -25,12 +25,12 @@ contract ChainList {
         public
         view
         returns (
-            address _seller,
+            address _owner,
             string memory _name,
             string memory _description,
             uint256 _price
-        ) 
+        )
     {
-        return (seller, name, description, price);
+        return (owner, name, description, price);
     }
 }
