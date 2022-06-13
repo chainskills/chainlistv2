@@ -39,6 +39,9 @@ contract ChainList {
 
     // buy an article
     function buyArticle() public payable {
+        // we ensure that there is an article to buy
+        require(owner != address(0x0), "No article to buy");
+
         // we don't allow the seller to buy his own article
         require(msg.sender != owner, "Seller cannot buy his own article");
 
