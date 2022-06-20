@@ -52,7 +52,7 @@ const Hero = () => {
 						test network.
 					</Typography>
 				)}
-				{!state.address && state.allowed && (
+				{!state.account && state.allowed && (
 					<div>
 						<Grid container spacing={2} justifyContent="center">
 							<Grid item>
@@ -81,17 +81,17 @@ const Hero = () => {
 						</Grid>
 					</div>
 				)}
-				{state.address !== null && state.allowed && (
+				{state.account !== null && state.allowed && (
 					<Grid container spacing={1} justifyContent="center" direction="row">
 						<Grid item>
 							<JazzIcon
 								diameter={30}
-								seed={jsNumberForAddress(state.address)}
+								seed={jsNumberForAddress(state.account)}
 							/>
 						</Grid>
 						<Grid item>
 							<Typography align="center" color="inherit" variant="h6">
-								{state.address}
+								{state.account}
 							</Typography>
 						</Grid>
 					</Grid>

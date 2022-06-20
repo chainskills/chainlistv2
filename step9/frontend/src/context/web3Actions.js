@@ -47,9 +47,9 @@ const connectWeb3 = async () => {
 		signer
 	);
 
-	let address = null;
+	let account = null;
 	try {
-		address = await signer.getAddress();
+		account = await signer.getAddress();
 	} catch (error) {}
 
 	// get chain settings
@@ -63,17 +63,15 @@ const connectWeb3 = async () => {
 		signer: signer,
 		provider: provider,
 		chainId: network.chainId,
-		address: address,
+		account: account,
 		name: name,
 		allowed: allowed,
 	};
 };
 
 const disconnectWeb3 = async (state) => {
-	if (state.contract !== null) {
-		// remove previous listeners
-		removeAllListeners(state.contract);
-	}
+	// remove previous listeners
+	removeAllListeners(state.contract);
 
 	// update the state
 	return {
@@ -83,25 +81,27 @@ const disconnectWeb3 = async (state) => {
 
 export const addAllListeners = (state, dispatch) => {
 	try {
-		state.contract.on("SellArticleEvent", async (_seller, _name, _price) => {
-			let eventMessage = "";
-			if (state.address === _seller) {
-				eventMessage =
-					"Your article  " + _name + " is available in the marketplace";
-			} else {
-				eventMessage =
-					"The article  " +
-					_name +
-					" is available in the marketplace for " +
-					ethers.utils.formatEther(_price) +
-					" ETH ";
-			}
-			dispatch({
-				type: INCOMING_EVENT,
-				eventMessage: eventMessage,
-				eventTimeStamp: new Date(),
+		state.provider.once("block", () => {
+			state.contract.on("SellArticleEvent", async (_seller, _name, _price) => {
+				let eventMessage = "";
+				if (state.account === _seller) {
+					eventMessage =
+						"Your article  " + _name + " is available in the marketplace";
+				} else {
+					eventMessage =
+						"The article  " +
+						_name +
+						" is available in the marketplace for " +
+						ethers.utils.formatEther(_price) +
+						" ETH ";
+				}
+				dispatch({
+					type: INCOMING_EVENT,
+					eventMessage: eventMessage,
+					eventTimeStamp: new Date(),
+				});
+				await reloadArticles(dispatch);
 			});
-			await reloadArticles(dispatch);
 		});
 	} catch (error) {
 		console.log(error);
@@ -181,7 +181,7 @@ export const sellArticle = async (state, dispatch, article) => {
 };
 
 export const getArticle = async (state, dispatch) => {
-	if (state.contract !== null && state.address !== null) {
+	if (state.contract !== null && state.account !== null) {
 		try {
 			const [_seller, _name, _description, _price] =
 				await state.contract.getArticle();

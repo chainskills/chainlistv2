@@ -9,27 +9,27 @@ import { useStore } from "context/StoreProvider";
 import { setupWeb3 } from "context/web3Actions";
 
 const theme = createTheme({
-    palette: {
-        type: "light",
-    },
+	palette: {
+		type: "light",
+	},
 });
 
 const App = () => {
-    const [state, dispatch] = useStore();
+	const [state, dispatch] = useStore();
 
-    useEffect(() => {
-        setupWeb3(state, dispatch);
-        // eslint-disable-next-line
-    }, []);
+	useEffect(() => {
+		setupWeb3(state, dispatch);
+		// eslint-disable-next-line
+	}, []);
 
-    return (
-        <ThemeProvider theme={theme}>
-            <CssBaseline />
-            <Header />
-            <Hero />
-            {state.allowed && <Articles />}
-        </ThemeProvider>
-    );
+	return (
+		<ThemeProvider theme={theme}>
+			<CssBaseline />
+			<Header />
+			<Hero />
+			{state.allowed && <Articles />}
+		</ThemeProvider>
+	);
 };
 
 export default App;

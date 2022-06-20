@@ -40,9 +40,9 @@ const connectWeb3 = async () => {
 		signer
 	);
 
-	let address = null;
+	let account = null;
 	try {
-		address = await signer.getAddress();
+		account = await signer.getAddress();
 	} catch (error) {}
 
 	// get chain settings
@@ -56,7 +56,7 @@ const connectWeb3 = async () => {
 		signer: signer,
 		provider: provider,
 		chainId: network.chainId,
-		address: address,
+		account: account,
 		name: name,
 		allowed: allowed,
 	};
@@ -130,7 +130,7 @@ export const sellArticle = async (state, dispatch, article) => {
 };
 
 export const getArticle = async (state, dispatch) => {
-	if (state.contract !== null && state.address !== null) {
+	if (state.contract !== null && state.account !== null) {
 		try {
 			const [_owner, _name, _description, _price] =
 				await state.contract.getArticle();

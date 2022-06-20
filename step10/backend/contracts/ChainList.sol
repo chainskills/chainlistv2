@@ -7,6 +7,11 @@ contract ChainList {
     string name;
     string description;
     uint256 price;
+    uint256 x;
+
+    fallback() external {
+        x = 1;
+    }
 
     // Events
     event SellArticleEvent(

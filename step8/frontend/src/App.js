@@ -28,7 +28,7 @@ const App = () => {
 			addAllListeners(state, dispatch);
 		}
 		// eslint-disable-next-line
-	}, [state.connected]);
+	}, [state.connected, state.account]);
 
 	useEffect(() => {
 		if (state.refreshTimeStamp) {
