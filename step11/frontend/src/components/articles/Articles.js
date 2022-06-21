@@ -4,7 +4,7 @@ import AddIcon from "@mui/icons-material/Add";
 import ArticleDialog from "./ArticleDialog";
 import ArticleCard from "./ArticleCard";
 import { useStore } from "context/StoreProvider";
-import { sellArticle } from "context/web3Actions";
+import { sellArticle, buyArticle } from "context/web3Actions";
 
 const Articles = () => {
 	const [state, dispatch] = useStore();
@@ -20,6 +20,11 @@ const Articles = () => {
 	// called when we add the article to be sold
 	const onSellArticle = async (_article) => {
 		await sellArticle(state, dispatch, _article);
+	};
+
+	// called when we buy the article
+	const onBuyArticle = async () => {
+		await buyArticle(state, dispatch, state.articlePrice);
 	};
 
 	return (
@@ -48,9 +53,12 @@ const Articles = () => {
 					{state.articleName !== "" && (
 						<Grid container spacing={4} sx={{ pb: 2 }}>
 							<ArticleCard
+								seller={state.seller}
 								name={state.articleName}
 								description={state.articleDescription}
 								price={state.articlePrice}
+								account={state.account}
+								handleBuyArticle={onBuyArticle}
 							/>
 						</Grid>
 					)}
