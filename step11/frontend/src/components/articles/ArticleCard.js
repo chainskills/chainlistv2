@@ -45,6 +45,15 @@ const ArticleCard = ({
 					>
 						{description}
 					</Typography>
+					<Typography
+						sx={{
+							marginBottom: 2,
+						}}
+						variant="body2"
+						component="p"
+					>
+						Sold by {seller === account ? "You" : seller}
+					</Typography>
 				</CardContent>
 				<CardActions>
 					{seller !== account && (
