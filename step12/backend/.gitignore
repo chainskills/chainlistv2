@@ -1,0 +1,15 @@
+node_modules
+.env
+coverage
+coverage.json
+typechain
+
+#Hardhat files
+cache
+artifacts
+
+#Other files
+.DS_Store
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
