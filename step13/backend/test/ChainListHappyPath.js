@@ -9,9 +9,14 @@ describe("ChainList - Happy Path", function () {
   let owner;
   let seller;
   let buyer;
+  const articleID1 = 1;
   const articleName1 = "article 1";
   const articleDescription1 = "Description for article 1";
   const articlePrice1 = 0.5;
+  const articleID2 = 2;
+  const articleName2 = "article 2";
+  const articleDescription2 = "Description for article 2";
+  const articlePrice2 = 0.7;
   let sellerBalanceBeforeSale, sellerBalanceAfterSale;
   let buyerBalanceBeforeSale, buyerBalanceAfterSale;
 
@@ -23,22 +28,33 @@ describe("ChainList - Happy Path", function () {
   });
 
   it("should be initialized with empty values", async () => {
-    const article = await chainListInstance.getArticle();
+    let nbArticles = await chainListInstance
+      .connect(seller)
+      .getNumberOfArticles();
+    expect(nbArticles, "number of articles must be zero").to.equal(0);
 
-    expect(article._owner, "owner must be empty").to.equal(
-      ethers.constants.AddressZero
-    );
-    expect(article._name, "article's name must be empty").to.equal("");
+    let articlesForSale = await chainListInstance
+      .connect(seller)
+      .getArticlesForSale();
     expect(
-      article._description,
-      "article's description must be empty"
-    ).to.equal("");
-    expect(article._price, "article's price must be zero").to.equal(
-      ethers.constants.Zero
-    );
+      articlesForSale.length,
+      "there shouldn't be any article fetched for the seller"
+    ).to.equal(0);
+
+    nbArticles = await chainListInstance.connect(buyer).getNumberOfArticles();
+    expect(nbArticles, "number of articles must be zero").to.equal(0);
+
+    articlesForSale = await chainListInstance
+      .connect(buyer)
+      .getArticlesForSale();
+    expect(
+      articlesForSale.length,
+      "there shouldn't be any article fetched for the buyer"
+    ).to.equal(0);
   });
 
-  it("should let us sell an article", async () => {
+  // sell a first article
+  it("should let us add a first article", async () => {
     const transaction = await chainListInstance
       .connect(seller)
       .sellArticle(
@@ -51,11 +67,14 @@ describe("ChainList - Happy Path", function () {
     const receipt = await transaction.wait();
 
     // check if the appropriate event has been emitted
-    expect(receipt.events.length).to.equal(1);
+    expect(receipt.logs.length).to.equal(1);
     expect(
       receipt.events[0].event,
       "event should be SellArticleEvent"
     ).to.equal("SellArticleEvent");
+    expect(receipt.events[0].args._id, "ID must be " + articleID1).to.equal(
+      articleID1
+    );
     expect(
       receipt.events[0].args._seller,
       "seller must be " + seller.address
@@ -70,30 +89,218 @@ describe("ChainList - Happy Path", function () {
     ).to.equal(ethers.utils.parseEther(articlePrice1.toString()));
 
     // check the article
-    const article = await chainListInstance.getArticle();
-    expect(article._name, "article name must be " + articleName1).to.equal(
-      articleName1
-    );
+    let nbArticles = await chainListInstance
+      .connect(seller)
+      .getNumberOfArticles();
+    expect(nbArticles, "number of articles must be 1").to.equal(1);
+
+    let articlesForSale = await chainListInstance
+      .connect(seller)
+      .getArticlesForSale();
     expect(
-      article._description,
+      articlesForSale.length,
+      "there must be no article for sale for the seller (seller cannot sell his own article)"
+    ).to.equal(0);
+
+    sellerArticles = await chainListInstance.connect(seller).getMyArticles();
+
+    expect(sellerArticles[0].id, "article id must be 1").to.equal(articleID1);
+    expect(
+      sellerArticles[0].owner,
+      "seller must be " + seller.address
+    ).to.equal(seller.address);
+    expect(
+      sellerArticles[0].name,
+      "article name must be " + articleName1
+    ).to.equal(articleName1);
+    expect(
+      sellerArticles[0].description,
       "article description must be " + articleDescription1
     ).to.equal(articleDescription1);
     expect(
-      article._price,
+      sellerArticles[0].price,
+      "article price must be " + articlePrice1 + " ETH"
+    ).to.equal(ethers.utils.parseEther(articlePrice1.toString()));
+
+    // the buyer checks the article on the marketplace
+    nbArticles = await chainListInstance.connect(buyer).getNumberOfArticles();
+    expect(nbArticles, "number of articles must be 1").to.equal(1);
+
+    articlesForSale = await chainListInstance
+      .connect(buyer)
+      .getArticlesForSale();
+    expect(
+      articlesForSale.length,
+      "there buyer must see one article on the marketplace"
+    ).to.equal(1);
+
+    expect(articlesForSale[0].id, "article id must be 1").to.equal(articleID1);
+    expect(
+      articlesForSale[0].owner,
+      "seller must be " + seller.address
+    ).to.equal(seller.address);
+    expect(
+      articlesForSale[0].name,
+      "article name must be " + articleName1
+    ).to.equal(articleName1);
+    expect(
+      articlesForSale[0].description,
+      "article description must be " + articleDescription1
+    ).to.equal(articleDescription1);
+    expect(
+      articlesForSale[0].price,
       "article price must be " + articlePrice1 + " ETH"
     ).to.equal(ethers.utils.parseEther(articlePrice1.toString()));
   });
 
-  // buy the article
-  it("should let us buy the article", async () => {
+  // sell a second article
+  it("should let us add a second article", async () => {
+    const transaction = await chainListInstance
+      .connect(seller)
+      .sellArticle(
+        articleName2,
+        articleDescription2,
+        ethers.utils.parseEther(articlePrice2.toString())
+      );
+
+    // wait for the transaction to complete
+    const receipt = await transaction.wait();
+
+    // check if the appropriate event has been emitted
+    expect(receipt.logs.length).to.equal(1);
+    expect(
+      receipt.events[0].event,
+      "event should be SellArticleEvent"
+    ).to.equal("SellArticleEvent");
+    expect(receipt.events[0].args._id, "ID must be " + articleID2).to.equal(
+      articleID2
+    );
+    expect(
+      receipt.events[0].args._seller,
+      "seller must be " + seller.address
+    ).to.equal(seller.address);
+    expect(
+      receipt.events[0].args._name,
+      "article name must be " + articleName2
+    ).to.equal(articleName2);
+    expect(
+      receipt.events[0].args._price.toString(),
+      "article price must be " + articlePrice2 + " ETH"
+    ).to.equal(ethers.utils.parseEther(articlePrice2.toString()));
+
+    // check the article
+    let nbArticles = await chainListInstance
+      .connect(seller)
+      .getNumberOfArticles();
+    expect(nbArticles, "number of articles must be 2").to.equal(2);
+
+    let articlesForSale = await chainListInstance
+      .connect(seller)
+      .getArticlesForSale();
+    expect(
+      articlesForSale.length,
+      "there must be no article for sale for the seller (seller cannot sell his own article)"
+    ).to.equal(0);
+
+    sellerArticles = await chainListInstance.connect(seller).getMyArticles();
+
+    expect(sellerArticles[0].id, "article id must be 1").to.equal(articleID1);
+    expect(
+      sellerArticles[0].owner,
+      "seller must be " + seller.address
+    ).to.equal(seller.address);
+    expect(
+      sellerArticles[0].name,
+      "article name must be " + articleName1
+    ).to.equal(articleName1);
+    expect(
+      sellerArticles[0].description,
+      "article description must be " + articleDescription1
+    ).to.equal(articleDescription1);
+    expect(
+      sellerArticles[0].price,
+      "article price must be " + articlePrice1 + " ETH"
+    ).to.equal(ethers.utils.parseEther(articlePrice1.toString()));
+
+    expect(sellerArticles[1].id, "article id must be 2").to.equal(articleID2);
+    expect(
+      sellerArticles[1].owner,
+      "seller must be " + seller.address
+    ).to.equal(seller.address);
+    expect(
+      sellerArticles[1].name,
+      "article name must be " + articleName2
+    ).to.equal(articleName2);
+    expect(
+      sellerArticles[1].description,
+      "article description must be " + articleDescription2
+    ).to.equal(articleDescription2);
+    expect(
+      sellerArticles[1].price,
+      "article price must be " + articlePrice2 + " ETH"
+    ).to.equal(ethers.utils.parseEther(articlePrice2.toString()));
+
+    // the buyer checks the article on the marketplace
+    nbArticles = await chainListInstance.connect(buyer).getNumberOfArticles();
+    expect(nbArticles, "number of articles must be 2").to.equal(2);
+
+    articlesForSale = await chainListInstance
+      .connect(buyer)
+      .getArticlesForSale();
+    expect(
+      articlesForSale.length,
+      "there buyer must see two articles on the marketplace"
+    ).to.equal(2);
+
+    expect(articlesForSale[0].id, "article id must be 1").to.equal(articleID1);
+    expect(
+      articlesForSale[1].owner,
+      "seller must be " + seller.address
+    ).to.equal(seller.address);
+    expect(
+      articlesForSale[0].name,
+      "article name must be " + articleName1
+    ).to.equal(articleName1);
+    expect(
+      articlesForSale[0].description,
+      "article description must be " + articleDescription1
+    ).to.equal(articleDescription1);
+    expect(
+      articlesForSale[0].price,
+      "article price must be " + articlePrice1 + " ETH"
+    ).to.equal(ethers.utils.parseEther(articlePrice1.toString()));
+
+    expect(articlesForSale[1].id, "article id must be 2").to.equal(articleID2);
+    expect(
+      articlesForSale[1].owner,
+      "seller must be " + seller.address
+    ).to.equal(seller.address);
+    expect(
+      articlesForSale[1].name,
+      "article name must be " + articleName2
+    ).to.equal(articleName2);
+    expect(
+      articlesForSale[1].description,
+      "article description must be " + articleDescription2
+    ).to.equal(articleDescription2);
+    expect(
+      articlesForSale[1].price,
+      "article price must be " + articlePrice2 + " ETH"
+    ).to.equal(ethers.utils.parseEther(articlePrice2.toString()));
+  });
+
+  // buy the first article
+  it("should let us buy the first article", async () => {
     // record balances of seller and buyer before the sale
     sellerBalanceBeforeSale = await seller.getBalance();
     buyerBalanceBeforeSale = await buyer.getBalance();
 
     // buy the article
-    const transaction = await chainListInstance.connect(buyer).buyArticle({
-      value: ethers.utils.parseEther(articlePrice1.toString()),
-    });
+    const transaction = await chainListInstance
+      .connect(buyer)
+      .buyArticle(articleID1, {
+        value: ethers.utils.parseEther(articlePrice1.toString(), "ether"),
+      });
 
     // wait for the transaction to complete
     const receipt = await transaction.wait();
@@ -162,21 +369,49 @@ describe("ChainList - Happy Path", function () {
       )
     );
 
-    // check that the article is now owned by the buyer
-    let article = await chainListInstance.getArticle();
-    expect(article._owner, "new seller must be " + buyer.address).to.equal(
+    // check that the first article is now owned by the buyer
+    let article = await chainListInstance.articles(articleID1);
+    expect(article.id, "article id must be 1").to.equal(articleID1);
+    expect(article.owner, "new seller must be " + buyer.address).to.equal(
       buyer.address
     );
-    expect(article._name, "article name must be " + articleName1).to.equal(
+    expect(article.name, "article name must be " + articleName1).to.equal(
       articleName1
     );
     expect(
-      article._description,
+      article.description,
       "description must be " + articleDescription1
     ).to.equal(articleDescription1);
     expect(
-      article._price,
+      article.price,
       "article price must be " + articlePrice1 + " ETH"
     ).to.equal(ethers.utils.parseEther(articlePrice1.toString()));
+
+    // check that the buyer sees only one article to purchase
+    articlesForSale = await chainListInstance
+      .connect(buyer)
+      .getArticlesForSale();
+    expect(
+      articlesForSale.length,
+      "there buyer must see one article on the marketplace"
+    ).to.equal(1);
+
+    expect(articlesForSale[0].id, "article id must be 2").to.equal(articleID2);
+    expect(
+      articlesForSale[0].owner,
+      "seller must be " + seller.address
+    ).to.equal(seller.address);
+    expect(
+      articlesForSale[0].name,
+      "article name must be " + articleName2
+    ).to.equal(articleName2);
+    expect(
+      articlesForSale[0].description,
+      "article description must be " + articleDescription2
+    ).to.equal(articleDescription2);
+    expect(
+      articlesForSale[0].price,
+      "article price must be " + articlePrice2 + " ETH"
+    ).to.equal(ethers.utils.parseEther(articlePrice2.toString()));
   });
 });
