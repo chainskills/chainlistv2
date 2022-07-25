@@ -26,9 +26,9 @@ describe("ChainList - Unhappy Path", function () {
     const nbArticles = await chainListInstance.getNumberOfArticles();
     expect(nbArticles, "number of articles must be zero").to.equal(0);
 
-    const articlesForSale = await chainListInstance.getArticlesForSale();
+    const marketplace = await chainListInstance.getMarketplace();
     expect(
-      articlesForSale.length,
+      marketplace.length,
       "there shouldn't be any article for sale"
     ).to.equal(0);
   });

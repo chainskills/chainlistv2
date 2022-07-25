@@ -116,7 +116,7 @@ contract ChainList {
     }
 
     // fetch and return all articles for sale not owned by the current account
-    function getArticlesForSale() public view returns (Article[] memory) {
+    function getMarketplace() public view returns (Article[] memory) {
         // prepare output array
         uint256[] memory articleIds = new uint256[](articleCounter);
 

@@ -33,22 +33,22 @@ describe("ChainList - Happy Path", function () {
       .getNumberOfArticles();
     expect(nbArticles, "number of articles must be zero").to.equal(0);
 
-    let articlesForSale = await chainListInstance
+    let marketplace = await chainListInstance
       .connect(seller)
-      .getArticlesForSale();
+      .getMarketplace();
     expect(
-      articlesForSale.length,
+      marketplace.length,
       "there shouldn't be any article fetched for the seller"
     ).to.equal(0);
 
     nbArticles = await chainListInstance.connect(buyer).getNumberOfArticles();
     expect(nbArticles, "number of articles must be zero").to.equal(0);
 
-    articlesForSale = await chainListInstance
+    marketplace = await chainListInstance
       .connect(buyer)
-      .getArticlesForSale();
+      .getMarketplace();
     expect(
-      articlesForSale.length,
+      marketplace.length,
       "there shouldn't be any article fetched for the buyer"
     ).to.equal(0);
   });
@@ -94,11 +94,11 @@ describe("ChainList - Happy Path", function () {
       .getNumberOfArticles();
     expect(nbArticles, "number of articles must be 1").to.equal(1);
 
-    let articlesForSale = await chainListInstance
+    let marketplace = await chainListInstance
       .connect(seller)
-      .getArticlesForSale();
+      .getMarketplace();
     expect(
-      articlesForSale.length,
+      marketplace.length,
       "there must be no article for sale for the seller (seller cannot sell his own article)"
     ).to.equal(0);
 
@@ -126,29 +126,29 @@ describe("ChainList - Happy Path", function () {
     nbArticles = await chainListInstance.connect(buyer).getNumberOfArticles();
     expect(nbArticles, "number of articles must be 1").to.equal(1);
 
-    articlesForSale = await chainListInstance
+    marketplace = await chainListInstance
       .connect(buyer)
-      .getArticlesForSale();
+      .getMarketplace();
     expect(
-      articlesForSale.length,
+      marketplace.length,
       "there buyer must see one article on the marketplace"
     ).to.equal(1);
 
-    expect(articlesForSale[0].id, "article id must be 1").to.equal(articleID1);
+    expect(marketplace[0].id, "article id must be 1").to.equal(articleID1);
     expect(
-      articlesForSale[0].owner,
+      marketplace[0].owner,
       "seller must be " + seller.address
     ).to.equal(seller.address);
     expect(
-      articlesForSale[0].name,
+      marketplace[0].name,
       "article name must be " + articleName1
     ).to.equal(articleName1);
     expect(
-      articlesForSale[0].description,
+      marketplace[0].description,
       "article description must be " + articleDescription1
     ).to.equal(articleDescription1);
     expect(
-      articlesForSale[0].price,
+      marketplace[0].price,
       "article price must be " + articlePrice1 + " ETH"
     ).to.equal(ethers.utils.parseEther(articlePrice1.toString()));
   });
@@ -194,11 +194,11 @@ describe("ChainList - Happy Path", function () {
       .getNumberOfArticles();
     expect(nbArticles, "number of articles must be 2").to.equal(2);
 
-    let articlesForSale = await chainListInstance
+    let marketplace = await chainListInstance
       .connect(seller)
-      .getArticlesForSale();
+      .getMarketplace();
     expect(
-      articlesForSale.length,
+      marketplace.length,
       "there must be no article for sale for the seller (seller cannot sell his own article)"
     ).to.equal(0);
 
@@ -244,47 +244,47 @@ describe("ChainList - Happy Path", function () {
     nbArticles = await chainListInstance.connect(buyer).getNumberOfArticles();
     expect(nbArticles, "number of articles must be 2").to.equal(2);
 
-    articlesForSale = await chainListInstance
+    marketplace = await chainListInstance
       .connect(buyer)
-      .getArticlesForSale();
+      .getMarketplace();
     expect(
-      articlesForSale.length,
+      marketplace.length,
       "there buyer must see two articles on the marketplace"
     ).to.equal(2);
 
-    expect(articlesForSale[0].id, "article id must be 1").to.equal(articleID1);
+    expect(marketplace[0].id, "article id must be 1").to.equal(articleID1);
     expect(
-      articlesForSale[1].owner,
+      marketplace[1].owner,
       "seller must be " + seller.address
     ).to.equal(seller.address);
     expect(
-      articlesForSale[0].name,
+      marketplace[0].name,
       "article name must be " + articleName1
     ).to.equal(articleName1);
     expect(
-      articlesForSale[0].description,
+      marketplace[0].description,
       "article description must be " + articleDescription1
     ).to.equal(articleDescription1);
     expect(
-      articlesForSale[0].price,
+      marketplace[0].price,
       "article price must be " + articlePrice1 + " ETH"
     ).to.equal(ethers.utils.parseEther(articlePrice1.toString()));
 
-    expect(articlesForSale[1].id, "article id must be 2").to.equal(articleID2);
+    expect(marketplace[1].id, "article id must be 2").to.equal(articleID2);
     expect(
-      articlesForSale[1].owner,
+      marketplace[1].owner,
       "seller must be " + seller.address
     ).to.equal(seller.address);
     expect(
-      articlesForSale[1].name,
+      marketplace[1].name,
       "article name must be " + articleName2
     ).to.equal(articleName2);
     expect(
-      articlesForSale[1].description,
+      marketplace[1].description,
       "article description must be " + articleDescription2
     ).to.equal(articleDescription2);
     expect(
-      articlesForSale[1].price,
+      marketplace[1].price,
       "article price must be " + articlePrice2 + " ETH"
     ).to.equal(ethers.utils.parseEther(articlePrice2.toString()));
   });
@@ -388,29 +388,29 @@ describe("ChainList - Happy Path", function () {
     ).to.equal(ethers.utils.parseEther(articlePrice1.toString()));
 
     // check that the buyer sees only one article to purchase
-    articlesForSale = await chainListInstance
+    marketplace = await chainListInstance
       .connect(buyer)
-      .getArticlesForSale();
+      .getMarketplace();
     expect(
-      articlesForSale.length,
+      marketplace.length,
       "there buyer must see one article on the marketplace"
     ).to.equal(1);
 
-    expect(articlesForSale[0].id, "article id must be 2").to.equal(articleID2);
+    expect(marketplace[0].id, "article id must be 2").to.equal(articleID2);
     expect(
-      articlesForSale[0].owner,
+      marketplace[0].owner,
       "seller must be " + seller.address
     ).to.equal(seller.address);
     expect(
-      articlesForSale[0].name,
+      marketplace[0].name,
       "article name must be " + articleName2
     ).to.equal(articleName2);
     expect(
-      articlesForSale[0].description,
+      marketplace[0].description,
       "article description must be " + articleDescription2
     ).to.equal(articleDescription2);
     expect(
-      articlesForSale[0].price,
+      marketplace[0].price,
       "article price must be " + articlePrice2 + " ETH"
     ).to.equal(ethers.utils.parseEther(articlePrice2.toString()));
   });
