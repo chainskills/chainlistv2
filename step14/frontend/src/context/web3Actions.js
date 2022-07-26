@@ -7,6 +7,8 @@ import {
 	SHOW_EVENTS,
 	INCOMING_EVENT,
 	RELOAD_ARTICLES,
+	GET_MARKETPLACE,
+	GET_MY_ARTICLES,
 } from "context/types";
 
 export const setupWeb3 = async (state, dispatch) => {
@@ -36,7 +38,6 @@ export const setupWeb3 = async (state, dispatch) => {
 		console.error("Metamask is not installed!");
 	}
 };
-
 
 const connectWeb3 = async () => {
 	// setup web3
@@ -86,30 +87,33 @@ export const addAllListeners = (state, dispatch) => {
 
 	try {
 		state.provider.once("block", () => {
-			state.contract.on("SellArticleEvent", async (_seller, _name, _price) => {
-				let eventMessage = "";
-				if (state.account === _seller) {
-					eventMessage =
-						"Your article  " + _name + " is available in the marketplace";
-				} else {
-					eventMessage =
-						"The article  " +
-						_name +
-						" is available in the marketplace for " +
-						ethers.utils.formatEther(_price) +
-						" ETH ";
+			state.contract.on(
+				"SellArticleEvent",
+				async (_id, _seller, _name, _price) => {
+					let eventMessage = "";
+					if (state.account === _seller) {
+						eventMessage =
+							"Your article  " + _name + " is available in the marketplace";
+					} else {
+						eventMessage =
+							"The article  " +
+							_name +
+							" is available in the marketplace for " +
+							ethers.utils.formatEther(_price) +
+							" ETH ";
+					}
+					dispatch({
+						type: INCOMING_EVENT,
+						eventMessage: eventMessage,
+						eventTimeStamp: new Date(),
+					});
+					await reloadArticles(dispatch);
 				}
-				dispatch({
-					type: INCOMING_EVENT,
-					eventMessage: eventMessage,
-					eventTimeStamp: new Date(),
-				});
-				await reloadArticles(dispatch);
-			});
+			);
 
 			state.contract.on(
 				"BuyArticleEvent",
-				async (_seller, _buyer, _name, _price) => {
+				async (_id, _seller, _buyer, _name, _price) => {
 					if (state.account === _seller) {
 						const eventMessage =
 							_buyer +
@@ -208,17 +212,61 @@ export const sellArticle = async (state, dispatch, article) => {
 	}
 };
 
-export const buyArticle = async (state, dispatch, price) => {
+export const buyArticle = async (state, dispatch, article) => {
 	if (state.contract !== null) {
 		try {
-			const transaction = await state.contract.buyArticle({
-				value: ethers.utils.parseUnits(price, "ether"),
+			const transaction = await state.contract.buyArticle(article.id, {
+				value: article.price,
 			});
 			await transaction.wait();
 		} catch (error) {
 			console.error(error);
 		}
 		await reloadArticles(dispatch);
+	}
+};
+
+export const getMarketplace = async (state, dispatch) => {
+	if (state.contract !== null && state.address !== null) {
+		try {
+			const articles = await state.contract.getMarketplace();
+			dispatch({
+				type: GET_MARKETPLACE,
+				articles: articles,
+				marketplace: true,
+				timeStamp: new Date(),
+			});
+		} catch (error) {
+			console.error(error);
+			dispatch({
+				type: GET_MARKETPLACE,
+				articles: [],
+				marketplace: true,
+				timeStamp: new Date(),
+			});
+		}
+	}
+};
+
+export const getMyArticles = async (state, dispatch) => {
+	if (state.contract !== null && state.address !== null) {
+		try {
+			const articles = await state.contract.getMyArticles();
+			dispatch({
+				type: GET_MY_ARTICLES,
+				articles: articles,
+				marketplace: false,
+				timeStamp: new Date(),
+			});
+		} catch (error) {
+			console.error(error);
+			dispatch({
+				type: GET_MY_ARTICLES,
+				articleIDs: [],
+				marketplace: false,
+				timeStamp: new Date(),
+			});
+		}
 	}
 };
 

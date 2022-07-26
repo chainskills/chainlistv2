@@ -5,7 +5,12 @@ import Hero from "components/layout/Hero";
 import Events from "components/layout/Events";
 import Articles from "components/articles/Articles";
 import { useStore } from "context/StoreProvider";
-import { setupWeb3, getArticle, addAllListeners } from "context/web3Actions";
+import {
+	setupWeb3,
+	getMarketplace,
+	getMyArticles,
+	addAllListeners,
+} from "context/web3Actions";
 import theme from "components/layout/theme";
 
 const App = () => {
@@ -25,7 +30,11 @@ const App = () => {
 
 	useEffect(() => {
 		if (state.refreshTimeStamp) {
-			getArticle(state, dispatch);
+			if (state.marketplace) {
+				getMarketplace(state, dispatch);
+			} else {
+				getMyArticles(state, dispatch);
+			}
 		}
 		// eslint-disable-next-line
 	}, [state.refreshTimeStamp]);

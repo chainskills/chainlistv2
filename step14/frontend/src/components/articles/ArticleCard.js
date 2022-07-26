@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 import {
 	Button,
@@ -8,76 +7,72 @@ import {
 	CardContent,
 	CardActions,
 } from "@mui/material";
+import { ethers } from "ethers";
 
-const ArticleCard = ({
-	seller,
-	name,
-	description,
-	price,
-	account,
-	handleBuyArticle,
-}) => {
+const ArticleCard = ({ article, account, handleBuyArticle }) => {
 	return (
-		<Grid item xs={12} sm={12} md={12}>
-			<Card
-				elevation={2}
-				sx={{ height: "100%", display: "flex", flexDirection: "column" }}
-			>
-				<CardContent>
-					<Typography gutterBottom variant="h5" component="h2">
-						{name}
-					</Typography>
-					<Typography
-						sx={{
-							marginBottom: 3,
-						}}
-						color="textSecondary"
-						component="h3"
-					>
-						{price} ETH
-					</Typography>
-					<Typography
-						sx={{
-							marginBottom: 2,
-						}}
-						variant="body2"
-						component="p"
-					>
-						{description}
-					</Typography>
-					<Typography
-						sx={{
-							marginBottom: 2,
-						}}
-						variant="body2"
-						component="p"
-					>
-						Sold by {seller === account ? "You" : seller}
-					</Typography>
-				</CardContent>
-				<CardActions>
-					{seller !== account && (
-						<Button
-							size="small"
-							color="primary"
-							variant="contained"
-							onClick={async () => {
-								await handleBuyArticle();
+		<Grid item key={article.id} xs={12} sm={12} md={12}>
+			{article.id && (
+				<Card
+					elevation={2}
+					sx={{ height: "100%", display: "flex", flexDirection: "column" }}
+				>
+					<CardContent>
+						<Typography gutterBottom variant="h5" component="h2">
+							{article.name}
+						</Typography>
+						<Typography
+							sx={{
+								marginBottom: 3,
 							}}
+							color="textSecondary"
+							component="h3"
 						>
-							Buy
-						</Button>
-					)}
-				</CardActions>
-			</Card>
+							{ethers.utils.formatEther(article.price)} ETH
+						</Typography>
+						<Typography
+							sx={{
+								marginBottom: 2,
+							}}
+							variant="body2"
+							component="p"
+						>
+							{article.description}
+						</Typography>
+						<Typography
+							sx={{
+								marginBottom: 2,
+							}}
+							variant="body2"
+							component="p"
+						>
+							Sold by {article.owner === account ? "You" : article.owner}
+						</Typography>
+					</CardContent>
+					<CardActions>
+						{article.owner !== account && (
+							<Button
+								size="small"
+								color="primary"
+								variant="contained"
+								onClick={async () => {
+									await handleBuyArticle(article);
+								}}
+							>
+								Buy
+							</Button>
+						)}
+					</CardActions>
+				</Card>
+			)}
 		</Grid>
 	);
 };
 
 ArticleCard.propTypes = {
-	name: PropTypes.string.isRequired,
-	description: PropTypes.string.isRequired,
-	price: PropTypes.string.isRequired,
+	article: PropTypes.array.isRequired,
+	account: PropTypes.string.isRequired,
+	handleBuyArticle: PropTypes.func.isRequired,
 };
 
 export default ArticleCard;

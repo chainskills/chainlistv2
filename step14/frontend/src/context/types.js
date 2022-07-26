@@ -4,7 +4,9 @@ export const WEB3_DISCONNECT = "WEB3_DISCONNECT";
 export const GET_ARTICLE = "GET_ARTICLE";
 export const ARTICLE_SAVED = "ARTICLE_SAVED";
 
-// types of actions to fetch the articles
+// types of actions to get the articles
+export const GET_MARKETPLACE = "GET_MARKETPLACE";
+export const GET_MY_ARTICLES = "GET_MY_ARTICLES";
 export const RELOAD_ARTICLES = "RELOAD_ARTICLES";
 
 // types of actions to manage the events

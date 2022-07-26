@@ -4,26 +4,26 @@ import {
 	WEB3_DISCONNECT,
 	GET_ARTICLE,
 	RELOAD_ARTICLES,
+	GET_MY_ARTICLES,
+	GET_MY_ARTICLES,
 	SHOW_EVENTS,
 	INCOMING_EVENT,
 } from "context/types";
 
 export const initialState = {
+	connected: false,
 	signer: null,
 	provider: null,
 	chainId: 0,
 	contract: null,
 	account: null,
-	name: "",
-	allowed: false,
-	articleName: "",
-	articleDescription: "",
-	articlePrice: 0,
-	refreshTimeStamp: null,
+	articles: [],
+	marketplace: false,
 	eventMessage: "",
 	showEvents: true,
+	timeStamp: null,
+	refreshTimeStamp: null,
 	eventTimeStamp: null,
-	connected: false,
 };
 
 export const web3Reducer = (state = initialState, action) => {
@@ -58,6 +58,14 @@ export const web3Reducer = (state = initialState, action) => {
 			return {
 				...state,
 				refreshTimeStamp: new Date(),
+			};
+		case GET_MARKETPLACE:
+		case GET_MY_ARTICLES:
+			return {
+				...state,
+				articles: action.articles,
+				marketplace: action.marketplace,
+				timeStamp: action.timeStamp,
 			};
 		case INCOMING_EVENT:
 			return {
