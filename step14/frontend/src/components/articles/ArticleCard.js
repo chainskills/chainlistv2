@@ -15,7 +15,11 @@ const ArticleCard = ({ article, account, handleBuyArticle }) => {
 			{article.id && (
 				<Card
 					elevation={2}
-					sx={{ height: "100%", display: "flex", flexDirection: "column" }}
+					sx={{
+						height: "100%",
+						display: "flex",
+						flexDirection: "column",
+					}}
 				>
 					<CardContent>
 						<Typography gutterBottom variant="h5" component="h2">

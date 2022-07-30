@@ -42,7 +42,7 @@ const Hero = () => {
 						variant="h5"
 						sx={{ pb: 2 }}
 					>
-						The active Ethereum network is {state.name}
+						The active Ethereum network is {state.networkName}
 					</Typography>
 				)}
 

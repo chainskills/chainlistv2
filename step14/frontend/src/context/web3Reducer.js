@@ -2,19 +2,19 @@ import PropTypes from "prop-types";
 import {
 	WEB3_CONNECT,
 	WEB3_DISCONNECT,
-	GET_ARTICLE,
 	RELOAD_ARTICLES,
-	GET_MY_ARTICLES,
+	GET_MARKETPLACE,
 	GET_MY_ARTICLES,
 	SHOW_EVENTS,
 	INCOMING_EVENT,
-} from "context/types";
+} from "context/web3Types";
 
 export const initialState = {
 	connected: false,
 	signer: null,
 	provider: null,
 	chainId: 0,
+	networkName: null,
 	contract: null,
 	account: null,
 	articles: [],
@@ -36,23 +36,15 @@ export const web3Reducer = (state = initialState, action) => {
 				chainId: action.chainId,
 				contract: action.contract,
 				account: action.account,
-				name: action.name,
+				networkName: action.networkName,
 				allowed: action.allowed,
 				refreshTimeStamp: new Date(),
-				connected: true,
+				connected: action.account !== null ? true : false,
 			};
 		case WEB3_DISCONNECT:
 			return {
 				...state,
 				initialState,
-			};
-		case GET_ARTICLE:
-			return {
-				...state,
-				seller: action.seller,
-				articleName: action.name,
-				articleDescription: action.description,
-				articlePrice: action.price,
 			};
 		case RELOAD_ARTICLES:
 			return {

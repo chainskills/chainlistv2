@@ -3,13 +3,12 @@ import ChainList from "artifacts/contracts/ChainList.sol/ChainList.json";
 import {
 	WEB3_CONNECT,
 	WEB3_DISCONNECT,
-	GET_ARTICLE,
 	SHOW_EVENTS,
 	INCOMING_EVENT,
 	RELOAD_ARTICLES,
 	GET_MARKETPLACE,
 	GET_MY_ARTICLES,
-} from "context/types";
+} from "context/web3Types";
 
 export const setupWeb3 = async (state, dispatch) => {
 	if (state.contract !== null) {
@@ -56,7 +55,7 @@ const connectWeb3 = async () => {
 
 	// get chain settings
 	const network = await provider.getNetwork();
-	const { name, allowed } = chainSettings(network.chainId);
+	const { networkName, allowed } = chainSettings(network.chainId);
 
 	// update the state
 	return {
@@ -66,7 +65,7 @@ const connectWeb3 = async () => {
 		provider: provider,
 		chainId: network.chainId,
 		account: account,
-		name: name,
+		networkName: networkName,
 		allowed: allowed,
 	};
 };
@@ -154,37 +153,37 @@ const chainSettings = (chainId) => {
 	switch (chainId) {
 		case 1:
 			return {
-				name: "Mainnet",
+				networkName: "Mainnet",
 				allowed: false,
 			};
 		case 2:
 			return {
-				name: "Morden",
+				networkName: "Morden",
 				allowed: false,
 			};
 		case 3:
 			return {
-				name: "Ropsten",
+				networkName: "Ropsten",
 				allowed: true,
 			};
 		case 4:
 			return {
-				name: "Rinkeby",
+				networkName: "Rinkeby",
 				allowed: false,
 			};
 		case 5:
 			return {
-				name: "Goerli",
+				networkName: "Goerli",
 				allowed: false,
 			};
 		case 42:
 			return {
-				name: "Kovan",
+				nnetworkNameame: "Kovan",
 				allowed: false,
 			};
 		default:
 			return {
-				name: "Private network",
+				networkName: "Private network",
 				allowed: true,
 			};
 	}
@@ -197,7 +196,7 @@ export const reloadArticles = async (dispatch) => {
 };
 
 export const sellArticle = async (state, dispatch, article) => {
-	if (state.contract !== null) {
+	if (state.contract !== null && state.account !== null) {
 		try {
 			const transaction = await state.contract.sellArticle(
 				article.name,
@@ -213,7 +212,7 @@ export const sellArticle = async (state, dispatch, article) => {
 };
 
 export const buyArticle = async (state, dispatch, article) => {
-	if (state.contract !== null) {
+	if (state.contract !== null && state.account !== null) {
 		try {
 			const transaction = await state.contract.buyArticle(article.id, {
 				value: article.price,
@@ -227,7 +226,7 @@ export const buyArticle = async (state, dispatch, article) => {
 };
 
 export const getMarketplace = async (state, dispatch) => {
-	if (state.contract !== null && state.address !== null) {
+	if (state.contract !== null && state.account !== null) {
 		try {
 			const articles = await state.contract.getMarketplace();
 			dispatch({
@@ -249,7 +248,7 @@ export const getMarketplace = async (state, dispatch) => {
 };
 
 export const getMyArticles = async (state, dispatch) => {
-	if (state.contract !== null && state.address !== null) {
+	if (state.contract !== null && state.account !== null) {
 		try {
 			const articles = await state.contract.getMyArticles();
 			dispatch({
@@ -265,31 +264,6 @@ export const getMyArticles = async (state, dispatch) => {
 				articleIDs: [],
 				marketplace: false,
 				timeStamp: new Date(),
-			});
-		}
-	}
-};
-
-export const getArticle = async (state, dispatch) => {
-	if (state.contract !== null && state.account !== null) {
-		try {
-			const [_seller, _name, _description, _price] =
-				await state.contract.getArticle();
-			dispatch({
-				type: GET_ARTICLE,
-				seller: _seller,
-				name: _name,
-				description: _description,
-				price: ethers.utils.formatEther(_price),
-			});
-		} catch (error) {
-			console.error(error);
-			dispatch({
-				type: GET_ARTICLE,
-				seller: null,
-				name: null,
-				description: null,
-				price: 0,
 			});
 		}
 	}

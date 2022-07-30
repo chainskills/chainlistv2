@@ -72,6 +72,9 @@ const Articles = () => {
 						indicatorColor="primary"
 						textColor="primary"
 						centered
+						sx={{
+							marginBottom: "20px",
+						}}
 					>
 						<Tab label="Marketplace" />
 						<Tab label="My Articles" />
@@ -98,7 +101,7 @@ const Articles = () => {
 						handleSaveDialog={onSellArticle}
 					/>
 
-					{state.articles.length === 0 && (
+					{(state.account === null || state.articles.length === 0) && (
 						<Box component="span" m={1}>
 							<Typography align="center" color="inherit" variant="h6">
 								No articles to display
@@ -106,16 +109,18 @@ const Articles = () => {
 						</Box>
 					)}
 
-					<Grid container spacing={4}>
-						{state.articles.map((article) => (
-							<ArticleCard
-								key={article.id}
-								article={article}
-								account={state.account}
-								handleBuyArticle={onBuyArticle}
-							/>
-						))}
-					</Grid>
+					{state.account !== null && (
+						<Grid container spacing={4}>
+							{state.articles.map((article) => (
+								<ArticleCard
+									key={article.id}
+									article={article}
+									account={state.account}
+									handleBuyArticle={onBuyArticle}
+								/>
+							))}
+						</Grid>
+					)}
 				</Container>
 			</div>
 		</div>
