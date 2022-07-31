@@ -12,6 +12,7 @@ contract ChainList {
     }
 
     // State variables
+    address payable owner;
     uint256 x;
     mapping(uint256 => Article) public articles;
     uint256 articleCounter;
@@ -35,6 +36,22 @@ contract ChainList {
         string _name,
         uint256 _price
     );
+
+    constructor() {
+        owner = payable(msg.sender);
+    }
+
+    // Destroy the contract
+    // Only allowed to the contract's owner
+    function destroy() public {
+        require(msg.sender == owner, "Only allowed to the contract's owner");
+        selfdestruct(owner);
+    }
+
+    // check if address is the owner
+    function isOwner() public view returns (bool) {
+        return (msg.sender == owner);
+    }
 
     // sell a new article
     function sellArticle(
