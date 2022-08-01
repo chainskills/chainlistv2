@@ -53,9 +53,21 @@ const connectWeb3 = async () => {
 		account = await signer.getAddress();
 	} catch (error) {}
 
-	// get chain settings
+	// get ch@ain settings
 	const network = await provider.getNetwork();
 	const { networkName, allowed } = chainSettings(network.chainId);
+
+	// check two things: if we are the owner of the contract and if the contract has not been destroyed
+	let owner = false;
+	let active = false;
+
+	try {
+		owner = await contract.isOwner();
+		active = await contract.isActive();
+	} catch (error) {
+		// this can happen if the contract has been destroyed
+		console.error(error);
+	}
 
 	// update the state
 	return {
@@ -67,6 +79,8 @@ const connectWeb3 = async () => {
 		account: account,
 		networkName: networkName,
 		allowed: allowed,
+		owner: owner,
+		active: active,
 	};
 };
 
@@ -196,75 +210,127 @@ export const reloadArticles = async (dispatch) => {
 };
 
 export const sellArticle = async (state, dispatch, article) => {
-	if (state.contract !== null && state.account !== null) {
-		try {
-			const transaction = await state.contract.sellArticle(
-				article.name,
-				article.description,
-				ethers.utils.parseUnits(article.price, "ether")
-			);
-			await transaction.wait();
-			await reloadArticles(dispatch);
-		} catch (error) {
-			console.error(error);
-		}
+	const active = await isActive(state, dispatch);
+	if (!active) {
+		return;
+	}
+
+	try {
+		const transaction = await state.contract.sellArticle(
+			article.name,
+			article.description,
+			ethers.utils.parseUnits(article.price, "ether")
+		);
+		await transaction.wait();
+		await reloadArticles(dispatch);
+	} catch (error) {
+		console.error(error);
 	}
 };
 
 export const buyArticle = async (state, dispatch, article) => {
-	if (state.contract !== null && state.account !== null) {
-		try {
-			const transaction = await state.contract.buyArticle(article.id, {
-				value: article.price,
-			});
-			await transaction.wait();
-		} catch (error) {
-			console.error(error);
-		}
-		await reloadArticles(dispatch);
+	const active = await isActive(state, dispatch);
+	if (!active) {
+		return;
 	}
+
+	try {
+		const transaction = await state.contract.buyArticle(article.id, {
+			value: article.price,
+		});
+		await transaction.wait();
+	} catch (error) {
+		console.error(error);
+	}
+	await reloadArticles(dispatch);
 };
 
 export const getMarketplace = async (state, dispatch) => {
-	if (state.contract !== null && state.account !== null) {
-		try {
-			const articles = await state.contract.getMarketplace();
-			dispatch({
-				type: GET_MARKETPLACE,
-				articles: articles,
-				marketplace: true,
-				timeStamp: new Date(),
-			});
-		} catch (error) {
-			console.error(error);
-			dispatch({
-				type: GET_MARKETPLACE,
-				articles: [],
-				marketplace: true,
-				timeStamp: new Date(),
-			});
-		}
+	const active = await isActive(state, dispatch);
+	if (!active) {
+		return;
+	}
+
+	try {
+		const articles = await state.contract.getMarketplace();
+		dispatch({
+			type: GET_MARKETPLACE,
+			articles: articles,
+			marketplace: true,
+			timeStamp: new Date(),
+		});
+	} catch (error) {
+		console.error(error);
+		dispatch({
+			type: GET_MARKETPLACE,
+			articles: [],
+			marketplace: true,
+			timeStamp: new Date(),
+		});
 	}
 };
 
 export const getMyArticles = async (state, dispatch) => {
+	const active = await isActive(state, dispatch);
+	if (!active) {
+		return;
+	}
+
+	try {
+		const articles = await state.contract.getMyArticles();
+		dispatch({
+			type: GET_MY_ARTICLES,
+			articles: articles,
+			marketplace: false,
+			timeStamp: new Date(),
+		});
+	} catch (error) {
+		console.error(error);
+		dispatch({
+			type: GET_MY_ARTICLES,
+			articleIDs: [],
+			marketplace: false,
+			timeStamp: new Date(),
+		});
+	}
+};
+
+const isActive = async (state, dispatch) => {
 	if (state.contract !== null && state.account !== null) {
+		// check last status of the contract
+		const active = await state.contract.isActive();
+
+		if (active !== state.active) {
+			// the active status of the contract has changed
+			// we propagate the new state
+			dispatch(await connectWeb3(state));
+		}
+		return active;
+	}
+
+	return false;
+};
+
+export const activate = async (state, dispatch) => {
+	if (state.contract !== null && state.account !== null && state.owner) {
 		try {
-			const articles = await state.contract.getMyArticles();
-			dispatch({
-				type: GET_MY_ARTICLES,
-				articles: articles,
-				marketplace: false,
-				timeStamp: new Date(),
-			});
+			const transaction = await state.contract.activate(true);
+			await transaction.wait();
+			dispatch(await connectWeb3(state));
 		} catch (error) {
 			console.error(error);
-			dispatch({
-				type: GET_MY_ARTICLES,
-				articleIDs: [],
-				marketplace: false,
-				timeStamp: new Date(),
-			});
+		}
+	}
+};
+
+export const deactivate = async (state, dispatch) => {
+	if (state.contract !== null && state.account !== null && state.owner) {
+		try {
+			const transaction = await state.contract.activate(false);
+			await transaction.wait();
+			dispatch(await connectWeb3(state));
+		} catch (error) {
+			console.error(error);
 		}
 	}
 };

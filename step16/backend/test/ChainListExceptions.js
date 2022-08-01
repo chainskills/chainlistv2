@@ -87,4 +87,25 @@ describe("ChainList - Unhappy Path", function () {
       })
     ).to.be.revertedWith("Price doesn't match");
   });
+
+  // deactivate the contract as a normal account
+  it("should throw an exception if you try to deactivate the contract if you are not the owner", async () => {
+    // try to buy the article
+    await expect(
+      chainListInstance.connect(seller).activate(false)
+    ).to.be.revertedWith("Only allowed to the contract's owner");
+  });
+
+  // buy an article to a deactivated contract
+  it("should throw an exception if you try to buy an article while the contract is not active", async () => {
+    // deactivate the contract
+    chainListInstance.connect(owner).activate(false);
+
+    // try to buy the article
+    await expect(
+      chainListInstance.connect(buyer).buyArticle(articleID1, {
+        value: ethers.utils.parseEther(articlePrice1.toString()),
+      })
+    ).to.be.revertedWith("Not active");
+  });
 });

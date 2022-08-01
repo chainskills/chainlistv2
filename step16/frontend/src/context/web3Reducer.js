@@ -16,6 +16,8 @@ export const initialState = {
 	chainId: 0,
 	networkName: null,
 	contract: null,
+	owner: false,
+	active: true,
 	account: null,
 	articles: [],
 	marketplace: false,
@@ -40,6 +42,8 @@ export const web3Reducer = (state = initialState, action) => {
 				allowed: action.allowed,
 				refreshTimeStamp: new Date(),
 				connected: action.account !== null ? true : false,
+				owner: action.owner,
+				active: action.active,
 			};
 		case WEB3_DISCONNECT:
 			return {

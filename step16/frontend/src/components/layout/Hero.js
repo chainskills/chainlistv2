@@ -2,9 +2,10 @@ import React from "react";
 import { Container, Box, Typography, Grid, Button } from "@mui/material";
 import JazzIcon, { jsNumberForAddress } from "react-jazzicon";
 import { useStore } from "context/StoreProvider";
+import { activate, deactivate } from "context/web3Actions";
 
 const Hero = () => {
-	const [state] = useStore();
+	const [state, dispatch] = useStore();
 
 	return (
 		<Box
@@ -94,6 +95,30 @@ const Hero = () => {
 								{state.account}
 							</Typography>
 						</Grid>
+
+						{state.owner && state.active && (
+							<Button
+								variant="contained"
+								color="primary"
+								onClick={async () => {
+									await deactivate(state, dispatch);
+								}}
+							>
+								Deactivate
+							</Button>
+						)}
+
+						{state.owner && !state.active && (
+							<Button
+								variant="contained"
+								color="primary"
+								onClick={async () => {
+									await activate(state, dispatch);
+								}}
+							>
+								Activate
+							</Button>
+						)}
 					</Grid>
 				)}
 			</Container>

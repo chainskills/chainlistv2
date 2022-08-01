@@ -13,6 +13,7 @@ contract ChainList {
 
     // State variables
     address payable owner;
+    bool active;
     uint256 x;
     mapping(uint256 => Article) public articles;
     uint256 articleCounter;
@@ -39,18 +40,24 @@ contract ChainList {
 
     constructor() {
         owner = payable(msg.sender);
-    }
-
-    // Destroy the contract
-    // Only allowed to the contract's owner
-    function destroy() public {
-        require(msg.sender == owner, "Only allowed to the contract's owner");
-        selfdestruct(owner);
+        active = true;
     }
 
     // check if address is the owner
     function isOwner() public view returns (bool) {
         return (msg.sender == owner);
+    }
+
+    // Activate or deactivate the contract
+    // Only allowed to the contract's owner
+    function activate(bool _active) public {
+        require(msg.sender == owner, "Only allowed to the contract's owner");
+        active = _active;
+    }
+
+    // check if contract is active
+    function isActive() public view returns (bool) {
+        return (active);
     }
 
     // sell a new article
@@ -59,6 +66,9 @@ contract ChainList {
         string memory _description,
         uint256 _price
     ) public {
+        // ensure that the contract is active
+        require(active, "Not active");
+
         // a name is required
         bytes memory name = bytes(_name);
         require(name.length > 0, "A name is required");
@@ -87,6 +97,9 @@ contract ChainList {
 
     // buy an article
     function buyArticle(uint256 _id) public payable {
+        // ensure that the contract is active
+        require(active, "Not active");
+
         // we check whether there is an article for sale
         require(articleCounter > 0, "No articles to buy");
 
@@ -134,6 +147,9 @@ contract ChainList {
 
     // fetch and return all articles for sale not owned by the current account
     function getMarketplace() public view returns (Article[] memory) {
+        // ensure that the contract is active
+        require(active, "Not active");
+
         // prepare output array
         uint256[] memory articleIds = new uint256[](articleCounter);
 
@@ -156,6 +172,9 @@ contract ChainList {
 
     // fetch and return all articles for sale owned by the current account
     function getMyArticles() public view returns (Article[] memory) {
+        // ensure that the contract is active
+        require(active, "Not active");
+
         // prepare output array
         uint256[] memory articleIds = new uint256[](articleCounter);
 

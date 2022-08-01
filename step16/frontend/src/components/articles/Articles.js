@@ -64,65 +64,73 @@ const Articles = () => {
 
 	return (
 		<div>
-			<div>
-				<Container>
-					<Tabs
-						value={selectedTab}
-						onChange={handleChangeSelector}
-						indicatorColor="primary"
-						textColor="primary"
-						centered
-						sx={{
-							marginBottom: "20px",
-						}}
-					>
-						<Tab label="Marketplace" />
-						<Tab label="My Articles" />
-					</Tabs>
-				</Container>
+			{state.active && state.account !== null && state.allowed && (
+				<div>
+					<Container>
+						<Tabs
+							value={selectedTab}
+							onChange={handleChangeSelector}
+							indicatorColor="primary"
+							textColor="primary"
+							centered
+							sx={{
+								marginBottom: "20px",
+							}}
+						>
+							<Tab label="Marketplace" />
+							<Tab label="My Articles" />
+						</Tabs>
+					</Container>
 
-				<Container fixed>
-					<Fab
-						aria-label="add"
-						color="primary"
-						onClick={handleOpen}
-						sx={{
-							position: "fixed",
-							bottom: 16,
-							right: 16,
-						}}
-					>
-						<AddIcon />
-					</Fab>
+					<Container fixed>
+						<Fab
+							aria-label="add"
+							color="primary"
+							onClick={handleOpen}
+							sx={{
+								position: "fixed",
+								bottom: 16,
+								right: 16,
+							}}
+						>
+							<AddIcon />
+						</Fab>
 
-					<ArticleDialog
-						isDialogOpened={isOpen}
-						handleCloseDialog={() => setIsOpen(false)}
-						handleSaveDialog={onSellArticle}
-					/>
+						<ArticleDialog
+							isDialogOpened={isOpen}
+							handleCloseDialog={() => setIsOpen(false)}
+							handleSaveDialog={onSellArticle}
+						/>
 
-					{(state.account === null || state.articles.length === 0) && (
-						<Box component="span" m={1}>
-							<Typography align="center" color="inherit" variant="h6">
-								No articles to display
-							</Typography>
-						</Box>
-					)}
+						{(state.account === null || state.articles.length === 0) && (
+							<Box component="span" m={1}>
+								<Typography align="center" color="inherit" variant="h6">
+									No articles to display
+								</Typography>
+							</Box>
+						)}
 
-					{state.account !== null && (
-						<Grid container spacing={4}>
-							{state.articles.map((article) => (
-								<ArticleCard
-									key={article.id}
-									article={article}
-									account={state.account}
-									handleBuyArticle={onBuyArticle}
-								/>
-							))}
-						</Grid>
-					)}
-				</Container>
-			</div>
+						{state.account !== null && (
+							<Grid container spacing={4}>
+								{state.articles.map((article) => (
+									<ArticleCard
+										key={article.id}
+										article={article}
+										account={state.account}
+										handleBuyArticle={onBuyArticle}
+									/>
+								))}
+							</Grid>
+						)}
+					</Container>
+				</div>
+			)}
+
+			{!state.active && state.account !== null && state.allowed && (
+				<Typography align="center" color="error" variant="h3">
+					Unable to fetch the contract
+				</Typography>
+			)}
 		</div>
 	);
 };
