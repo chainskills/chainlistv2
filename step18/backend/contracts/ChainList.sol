@@ -1,7 +1,9 @@
 //SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
-contract ChainList {
+import "@openzeppelin/contracts/access/Ownable.sol";
+
+contract ChainList is Ownable {
     // Custom types
     struct Article {
         uint256 id;
@@ -12,7 +14,6 @@ contract ChainList {
     }
 
     // State variables
-    address payable owner;
     bool active;
     uint256 x;
     mapping(uint256 => Article) public articles;
@@ -46,19 +47,17 @@ contract ChainList {
     }
 
     constructor() {
-        owner = payable(msg.sender);
         active = true;
     }
 
     // check if address is the owner
     function isOwner() public view returns (bool) {
-        return (msg.sender == owner);
+        return (msg.sender == owner());
     }
 
     // Activate or deactivate the contract
     // Only allowed to the contract's owner
-    function activate(bool _active) public {
-        require(msg.sender == owner, "Only allowed to the contract's owner");
+    function activate(bool _active) public onlyOwner {
         active = _active;
     }
 
