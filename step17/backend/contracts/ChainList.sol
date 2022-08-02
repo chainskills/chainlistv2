@@ -38,6 +38,13 @@ contract ChainList {
         uint256 _price
     );
 
+    // Modifiers
+    modifier onlyActive() {
+        // ensure that the contract is active
+        require(active, "Not active");
+        _;
+    }
+
     constructor() {
         owner = payable(msg.sender);
         active = true;
@@ -65,10 +72,7 @@ contract ChainList {
         string memory _name,
         string memory _description,
         uint256 _price
-    ) public {
-        // ensure that the contract is active
-        require(active, "Not active");
-
+    ) public onlyActive {
         // a name is required
         bytes memory name = bytes(_name);
         require(name.length > 0, "A name is required");
@@ -96,10 +100,7 @@ contract ChainList {
     }
 
     // buy an article
-    function buyArticle(uint256 _id) public payable {
-        // ensure that the contract is active
-        require(active, "Not active");
-
+    function buyArticle(uint256 _id) public payable onlyActive {
         // we check whether there is an article for sale
         require(articleCounter > 0, "No articles to buy");
 
@@ -146,10 +147,12 @@ contract ChainList {
     }
 
     // fetch and return all articles for sale not owned by the current account
-    function getMarketplace() public view returns (Article[] memory) {
-        // ensure that the contract is active
-        require(active, "Not active");
-
+    function getMarketplace()
+        public
+        view
+        onlyActive
+        returns (Article[] memory)
+    {
         // prepare output array
         uint256[] memory articleIds = new uint256[](articleCounter);
 
@@ -171,10 +174,7 @@ contract ChainList {
     }
 
     // fetch and return all articles for sale owned by the current account
-    function getMyArticles() public view returns (Article[] memory) {
-        // ensure that the contract is active
-        require(active, "Not active");
-
+    function getMyArticles() public view onlyActive returns (Article[] memory) {
         // prepare output array
         uint256[] memory articleIds = new uint256[](articleCounter);
 
