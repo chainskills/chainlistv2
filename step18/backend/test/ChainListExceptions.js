@@ -1,8 +1,5 @@
 const { expect, assert, use } = require("chai");
 const { ethers } = require("hardhat");
-const { solidity } = require("ethereum-waffle");
-
-use(solidity);
 
 describe("ChainList - Unhappy Path", function () {
   let chainListInstance;
@@ -93,7 +90,7 @@ describe("ChainList - Unhappy Path", function () {
     // try to buy the article
     await expect(
       chainListInstance.connect(seller).activate(false)
-    ).to.be.revertedWith("Only allowed to the contract's owner");
+    ).to.be.revertedWith("Ownable: caller is not the owner");
   });
 
   // buy an article to a deactivated contract
