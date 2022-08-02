@@ -1,0 +1,36 @@
+yarn run v1.22.17
+$ BROWSER='google chrome' react-scripts start
+(node:48928) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:48928) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+Compiled successfully!
+
+You can now view frontend in the browser.
+
+  Local:            http://localhost:3000
+  On Your Network:  http://192.168.1.13:3000
+
+Note that the development build is not optimized.
+To create a production build, use yarn build.
+
+asset static/js/bundle.js 3.01 MiB [emitted] (name: main) 1 related asset
+asset index.html 524 bytes [emitted]
+asset asset-manifest.json 190 bytes [emitted]
+orphan modules 391 KiB [orphan] 158 modules
+runtime modules 28.3 KiB 15 modules
+modules by path ./node_modules/ 2.5 MiB 348 modules
+modules by path ./src/ 38.7 KiB
+  modules by path ./src/components/ 23.7 KiB
+    modules by path ./src/components/articles/*.js 14.1 KiB 3 modules
+    modules by path ./src/components/layout/*.js 9.64 KiB 2 modules
+  modules by path ./src/context/*.js 8.46 KiB
+    ./src/context/StoreProvider.js 2.14 KiB [built] [code generated]
+    + 3 modules
+  modules by path ./src/*.js 4.48 KiB
+    ./src/index.js 1.73 KiB [built] [code generated]
+    ./src/App.js 2.75 KiB [built] [code generated]
+  ./src/utils/NumberFormatCustom.js 2.03 KiB [built] [code generated]
+buffer (ignored) 15 bytes [optional] [built] [code generated]
+webpack 5.70.0 compiled successfully in 17829 ms
