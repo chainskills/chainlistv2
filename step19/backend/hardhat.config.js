@@ -1,4 +1,8 @@
 require("@nomicfoundation/hardhat-toolbox");
+require("dotenv").config();
+
+console.log([process.env.ALCHEMY_API_KEY]);
+console.log([process.env.GOERLI_PRIVATE_KEY]);
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -31,6 +35,10 @@ module.exports = {
     hardhat: {
       chainId: 1337,
       coinbase: "0x8626f6940e2eb28930efb4cef49b2d1f2c9c1199",
+    },
+    goerli: {
+      url: `https://eth-goerli.alchemyapi.io/v2/${process.env.ALCHEMY_API_KEY}`,
+      accounts: [process.env.GOERLI_PRIVATE_KEY],
     },
   },
 };

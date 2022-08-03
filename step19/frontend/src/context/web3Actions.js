@@ -69,6 +69,9 @@ const connectWeb3 = async () => {
 		console.error(error);
 	}
 
+	console.log("network.chainId");
+	console.log(network.chainId);
+
 	// update the state
 	return {
 		type: WEB3_CONNECT,
@@ -163,6 +166,9 @@ const removeAllListeners = (contract) => {
 };
 
 const chainSettings = (chainId) => {
+	console.log("ChainId:");
+	console.log(chainId);
+
 	// get the network name and detect if the network is allowed by our application
 	switch (chainId) {
 		case 1:
@@ -183,16 +189,16 @@ const chainSettings = (chainId) => {
 		case 4:
 			return {
 				networkName: "Rinkeby",
-				allowed: false,
+				allowed: true,
 			};
 		case 5:
 			return {
 				networkName: "Goerli",
-				allowed: false,
+				allowed: true,
 			};
 		case 42:
 			return {
-				nnetworkNameame: "Kovan",
+				nnetworkName: "Kovan",
 				allowed: false,
 			};
 		default:
