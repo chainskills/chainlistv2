@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/chainlistv2/static/js/main.b61552d3.js",
+    "index.html": "/chainlistv2/index.html",
+    "main.b61552d3.js.map": "/chainlistv2/static/js/main.b61552d3.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.b61552d3.js"
+  ]
+}
