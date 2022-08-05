@@ -2,7 +2,7 @@
 	"name": "frontend",
 	"version": "0.1.0",
 	"private": true,
-	"homepage": "https://github.com/chainskills/chainlistv2",
+	"homepage": "https://chainskills.github.io/chainlistv2",
 	"dependencies": {
 		"@emotion/react": "^11.10.0",
 		"@emotion/styled": "^11.10.0",
@@ -19,7 +19,7 @@
 	},
 	"scripts": {
 		"predeploy": "yarn run build",
-		"deploy": "gh-pages -b step20 -d build",
+		"deploy": "gh-pages -d build",
 		"start": "BROWSER=none react-scripts start",
 		"build": "react-scripts build",
 		"test": "react-scripts test",
