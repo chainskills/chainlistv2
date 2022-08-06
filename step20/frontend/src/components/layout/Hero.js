@@ -23,7 +23,7 @@ const Hero = () => {
 					color="textPrimary"
 					gutterBottom
 				>
-					ChainList v2
+					ChainList
 				</Typography>
 				<Typography variant="h4" align="center" color="textSecondary" paragraph>
 					Sell and buy articles over the Ethereum blockchain.
