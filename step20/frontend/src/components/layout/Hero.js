@@ -1,5 +1,6 @@
 import React from "react";
 import { Container, Box, Typography, Grid, Button } from "@mui/material";
+import JazzIcon, { jsNumberForAddress } from "react-jazzicon";
 import { useStore } from "context/StoreProvider";
 import { activate, deactivate } from "context/web3Actions";
 
@@ -83,7 +84,12 @@ const Hero = () => {
 				)}
 				{state.account !== null && state.allowed && (
 					<Grid container spacing={1} justifyContent="center" direction="row">
-						<Grid item></Grid>
+						<Grid item>
+							<JazzIcon
+								diameter={30}
+								seed={jsNumberForAddress(state.account)}
+							/>
+						</Grid>
 						<Grid item>
 							<Typography align="center" color="inherit" variant="h6">
 								{state.account}
