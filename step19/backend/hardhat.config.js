@@ -1,5 +1,12 @@
 require("@nomicfoundation/hardhat-toolbox");
-require("dotenv").config();
+
+// read secrets
+const {
+  alchemyApiKeyGoerli,
+  privateKeyGoerli,
+  alchemyApiKeyMainnet,
+  privateKeyMainnet,
+} = require("./secrets.json");
 
 // This is a sample Hardhat task. To learn how to create your own go to
 // https://hardhat.org/guides/create-task.html
@@ -34,12 +41,12 @@ module.exports = {
       coinbase: "0x8626f6940e2eb28930efb4cef49b2d1f2c9c1199",
     },
     goerli: {
-      url: process.env.GOERLI_ALCHEMY_URL,
-      accounts: [process.env.GOERLI_PRIVATE_KEY],
+      url: alchemyApiKeyGoerli,
+      accounts: [privateKeyGoerli],
     },
     mainnet: {
-      url: process.env.MAINNET_ALCHEMY_URL,
-      accounts: [process.env.MAINNET_PRIVATE_KEY],
+      url: alchemyApiKeyMainnet,
+      accounts: [privateKeyMainnet],
     },
   },
 };
