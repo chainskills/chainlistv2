@@ -13,5 +13,5 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-#secrets data to deploy your contract
+#Secrets data to deploy your contract
 secrets.json

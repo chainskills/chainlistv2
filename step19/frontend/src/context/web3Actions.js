@@ -9,6 +9,7 @@ import {
 	GET_MARKETPLACE,
 	GET_MY_ARTICLES,
 } from "context/web3Types";
+import settings from "settings";
 
 export const setupWeb3 = async (state, dispatch) => {
 	if (state.contract !== null) {
@@ -41,21 +42,37 @@ export const setupWeb3 = async (state, dispatch) => {
 const connectWeb3 = async () => {
 	// setup web3
 	const provider = new ethers.providers.Web3Provider(window.ethereum);
-	const signer = provider.getSigner();
-	const contract = new ethers.Contract(
-		process.env.REACT_APP_CONTRACT_ADDRESS,
-		ChainList.abi,
-		signer
+
+	// get chain settings
+	const network = await provider.getNetwork();
+	const { networkName, contractAddress, allowed } = chainSettings(
+		network.chainId
 	);
+
+	// if not allowed, not needed to go further
+	if (!allowed) {
+		return {
+			type: WEB3_CONNECT,
+			contract: null,
+			signer: null,
+			provider: provider,
+			chainId: network.chainId,
+			account: null,
+			networkName: networkName,
+			allowed: false,
+			owner: null,
+			active: false,
+		};
+	}
+
+	// we can pursue the connection
+	const signer = provider.getSigner();
+	const contract = new ethers.Contract(contractAddress, ChainList.abi, signer);
 
 	let account = null;
 	try {
 		account = await signer.getAddress();
 	} catch (error) {}
-
-	// get ch@ain settings
-	const network = await provider.getNetwork();
-	const { networkName, allowed } = chainSettings(network.chainId);
 
 	// check two things: if we are the owner of the contract and if the contract has not been destroyed
 	let owner = false;
@@ -168,36 +185,42 @@ const chainSettings = (chainId) => {
 		case 1:
 			return {
 				networkName: "Mainnet",
+				contractAddress: null,
 				allowed: false,
 			};
 		case 2:
 			return {
 				networkName: "Morden",
+				contractAddress: null,
 				allowed: false,
 			};
 		case 3:
 			return {
 				networkName: "Ropsten",
-				allowed: true,
+				contractAddress: null,
+				allowed: false,
 			};
 		case 4:
 			return {
 				networkName: "Rinkeby",
-				allowed: true,
+				contractAddress: null,
+				allowed: false,
 			};
 		case 5:
 			return {
 				networkName: "Goerli",
+				contractAddress: settings.contractAddressGoerli,
 				allowed: true,
 			};
 		case 42:
 			return {
-				nnetworkName: "Kovan",
+				networkName: "Kovan",
 				allowed: false,
 			};
 		default:
 			return {
 				networkName: "Private network",
+				contractAddress: settings.contractAddressPrivate,
 				allowed: true,
 			};
 	}

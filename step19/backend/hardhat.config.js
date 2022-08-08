@@ -1,6 +1,6 @@
 require("@nomicfoundation/hardhat-toolbox");
 
-// read secrets
+// read secrets keys
 const {
   alchemyApiKeyGoerli,
   privateKeyGoerli,
