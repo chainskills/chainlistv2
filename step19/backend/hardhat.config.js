@@ -2,9 +2,9 @@ require("@nomicfoundation/hardhat-toolbox");
 
 // read secrets keys
 const {
-  alchemyApiKeyGoerli,
+  alchemyURLGoerli,
   privateKeyGoerli,
-  alchemyApiKeyMainnet,
+  alchemyURLMainnet,
   privateKeyMainnet,
 } = require("./secrets.json");
 
@@ -41,11 +41,11 @@ module.exports = {
       coinbase: "0x8626f6940e2eb28930efb4cef49b2d1f2c9c1199",
     },
     goerli: {
-      url: alchemyApiKeyGoerli,
+      url: alchemyURLGoerli,
       accounts: [privateKeyGoerli],
     },
     mainnet: {
-      url: alchemyApiKeyMainnet,
+      url: alchemyURLMainnet,
       accounts: [privateKeyMainnet],
     },
   },
