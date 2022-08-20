@@ -13,7 +13,7 @@
 		"@mui/icons-material": "^5.8.4",
 		"@mui/material": "^5.10.1",
 		"@mui/system": "^5.10.1",
-		"ethers": "^5.6.9",
+		"ethers": "^5.7.0",
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-jazzicon": "1.0.4",
