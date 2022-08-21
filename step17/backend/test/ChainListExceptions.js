@@ -1,8 +1,5 @@
 const { expect, assert, use } = require("chai");
 const { ethers } = require("hardhat");
-const { solidity } = require("ethereum-waffle");
-
-use(solidity);
 
 describe("ChainList - Unhappy Path", function () {
   let chainListInstance;
