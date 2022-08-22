@@ -6,15 +6,13 @@ const Store = createContext();
 export const useStore = () => useContext(Store);
 
 export const StoreProvider = ({ children, initialState, reducer }) => {
-	const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-	return (
-		<Store.Provider value={[state, dispatch]}>{children}</Store.Provider>
-	);
+  return <Store.Provider value={[state, dispatch]}>{children}</Store.Provider>;
 };
 
 StoreProvider.propTypes = {
-	children: PropTypes.object.isRequired,
-	initialState: PropTypes.object.isRequired,
-	reducer: PropTypes.func.isRequired,
+  children: PropTypes.object.isRequired,
+  initialState: PropTypes.object.isRequired,
+  reducer: PropTypes.func.isRequired,
 };
