@@ -39,7 +39,7 @@ export const web3Reducer = (state = initialState, action) => {
         networkName: action.networkName,
         allowed: action.allowed,
         refreshTimeStamp: new Date(),
-        connected: traction.account !== null ? true : false,
+        connected: action.account !== null ? true : false,
       };
     case WEB3_DISCONNECT:
       return {
