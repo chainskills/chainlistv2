@@ -4,7 +4,7 @@ import Header from "components/layout/Header";
 import Hero from "components/layout/Hero";
 import Articles from "components/articles/Articles";
 import { useStore } from "context/StoreProvider";
-import { setupWeb3, getArticle, addAllListeners } from "context/web3Actions";
+import { setupWeb3, getArticle } from "context/web3Actions";
 import theme from "components/layout/theme";
 
 const App = () => {
@@ -14,13 +14,6 @@ const App = () => {
     setupWeb3(state, dispatch);
     // eslint-disable-next-line
   }, []);
-
-  useEffect(() => {
-    if (state.connected) {
-      addAllListeners(state, dispatch);
-    }
-    // eslint-disable-next-line
-  }, [state.connected, state.account]);
 
   useEffect(() => {
     if (state.refreshTimeStamp) {
