@@ -2,13 +2,16 @@ import React from "react";
 import PropTypes from "prop-types";
 import NumberFormat from "react-number-format";
 
-const NumberFormatCustom = (props) => {
-	const { inputRef, onChange, ...other } = props;
+const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(
+	props,
+	ref
+) {
+	const { onChange, ...other } = props;
 
 	return (
 		<NumberFormat
 			{...other}
-			getInputRef={inputRef}
+			getInputRef={ref}
 			onValueChange={(values) => {
 				onChange({
 					target: {
@@ -21,10 +24,9 @@ const NumberFormatCustom = (props) => {
 			isNumericString
 		/>
 	);
-};
+});
 
 NumberFormatCustom.propTypes = {
-	inputRef: PropTypes.func.isRequired,
 	name: PropTypes.string.isRequired,
 	onChange: PropTypes.func.isRequired,
 };
