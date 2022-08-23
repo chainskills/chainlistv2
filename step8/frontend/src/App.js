@@ -9,36 +9,36 @@ import { setupWeb3, getArticle, addAllListeners } from "context/web3Actions";
 import theme from "components/layout/theme";
 
 const App = () => {
-	const [state, dispatch] = useStore();
+  const [state, dispatch] = useStore();
 
-	useEffect(() => {
-		setupWeb3(state, dispatch);
-		// eslint-disable-next-line
-	}, []);
+  useEffect(() => {
+    setupWeb3(state, dispatch);
+    // eslint-disable-next-line
+  }, []);
 
-	useEffect(() => {
-		if (state.connected) {
-			addAllListeners(state, dispatch);
-		}
-		// eslint-disable-next-line
-	}, [state.connected, state.account]);
+  useEffect(() => {
+    if (state.connected) {
+      addAllListeners(state, dispatch);
+    }
+    // eslint-disable-next-line
+  }, [state.connected, state.account]);
 
-	useEffect(() => {
-		if (state.refreshTimeStamp) {
-			getArticle(state, dispatch);
-		}
-		// eslint-disable-next-line
-	}, [state.refreshTimeStamp]);
+  useEffect(() => {
+    if (state.refreshTimeStamp) {
+      getArticle(state, dispatch);
+    }
+    // eslint-disable-next-line
+  }, [state.refreshTimeStamp]);
 
-	return (
-		<ThemeProvider theme={theme}>
-			<CssBaseline />
-			<Header />
-			<Hero />
-			{state.allowed && <Articles />}
-			<Events />
-		</ThemeProvider>
-	);
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Header />
+      <Hero />
+      {state.allowed && <Articles />}
+      <Events />
+    </ThemeProvider>
+  );
 };
 
 export default App;
