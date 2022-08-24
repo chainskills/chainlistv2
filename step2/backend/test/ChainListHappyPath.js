@@ -1,13 +1,10 @@
 const { expect, use } = require("chai");
 const { ethers } = require("hardhat");
-const { solidity } = require("ethereum-waffle");
-
-use(solidity);
 
 describe("ChainList - Happy Path", function () {
   let chainListInstance;
-  let contractOwner;
-  let articleOwner;
+  let owner;
+  let seller;
   const articleName1 = "article 1";
   const articleDescription1 = "Description for article 1";
   const articlePrice1 = 0.5;
@@ -16,7 +13,7 @@ describe("ChainList - Happy Path", function () {
     const ChainList = await ethers.getContractFactory("ChainList");
     chainListInstance = await ChainList.deploy();
     await chainListInstance.deployed();
-    [contractOwner, articleOwner] = await ethers.getSigners();
+    [owner, seller] = await ethers.getSigners();
   });
 
   it("should be initialized with empty values", async () => {
@@ -37,7 +34,7 @@ describe("ChainList - Happy Path", function () {
 
   it("should let us sell an article", async () => {
     const transaction = await chainListInstance
-      .connect(articleOwner)
+      .connect(seller)
       .sellArticle(
         articleName1,
         articleDescription1,
