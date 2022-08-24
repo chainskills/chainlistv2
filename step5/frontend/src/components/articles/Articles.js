@@ -26,34 +26,32 @@ const Articles = () => {
 
   return (
     <div>
-      <div>
-        <Container fixed>
-          <Fab
-            aria-label="add"
-            color="primary"
-            onClick={handleOpen}
-            sx={{
-              position: "fixed",
-              bottom: 16,
-              right: 16,
-            }}
-          >
-            <AddIcon />
-          </Fab>
+      <Container fixed>
+        <Fab
+          aria-label="add"
+          color="primary"
+          onClick={handleOpen}
+          sx={{
+            position: "fixed",
+            bottom: 16,
+            right: 16,
+          }}
+        >
+          <AddIcon />
+        </Fab>
 
-          <ArticleDialog
-            isDialogOpened={isOpen}
-            handleCloseDialog={() => setIsOpen(false)}
-            handleSaveDialog={onSellArticle}
-          />
+        <ArticleDialog
+          isDialogOpened={isOpen}
+          handleCloseDialog={() => setIsOpen(false)}
+          handleSaveDialog={onSellArticle}
+        />
 
-          {article.name !== "" && (
-            <Grid container spacing={4} sx={{ pb: 2 }}>
-              <ArticleCard article={article} />
-            </Grid>
-          )}
-        </Container>
-      </div>
+        {article.name !== "" && (
+          <Grid container spacing={4} sx={{ pb: 2 }}>
+            <ArticleCard article={article} />
+          </Grid>
+        )}
+      </Container>
     </div>
   );
 };

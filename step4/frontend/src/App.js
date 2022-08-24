@@ -5,16 +5,15 @@ import Hero from "components/layout/Hero";
 import Articles from "components/articles/Articles";
 import theme from "components/layout/theme";
 
-
 const App = () => {
-	return (
-		<ThemeProvider theme={theme}>
-			<CssBaseline />
-			<Header />
-			<Hero />
-			{state.allowed && <Articles />}
-		</ThemeProvider>
-	);
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Header />
+      <Hero />
+      <Articles />
+    </ThemeProvider>
+  );
 };
 
 export default App;

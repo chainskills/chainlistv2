@@ -1,20 +1,16 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
+import { Container, Box, Typography, Grid, Button } from "@mui/material";
 
-const useStyles = makeStyles((theme) => ({
-	heroContent: {
-		backgroundColor: theme.palette.background.paper,
-		padding: theme.spacing(8, 0, 6),
-	},
-}));
 
 const Hero = () => {
-	const classes = useStyles();
-
 	return (
-		<div className={classes.heroContent}>
+            <Box
+            sx={{
+            backgroundColor: "background.paper",
+            pt: 12,
+            pb: 6,
+            }}
+            >
 			<Container maxWidth="sm">
 				<Typography
 					variant="h2"
@@ -28,7 +24,7 @@ const Hero = () => {
 					Sell and buy articles over the Ethereum blockchain.
 				</Typography>
 			</Container>
-		</div>
+		</Box>
 	);
 };
 
