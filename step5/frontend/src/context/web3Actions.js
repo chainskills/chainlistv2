@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import { WEB3_CONNECT, WEB3_DISCONNECT } from "context/types";
+import { WEB3_CONNECT, WEB3_DISCONNECT } from "context/web3Types";
 
 export const setupWeb3 = async (state, dispatch) => {
   if (typeof window.ethereum !== "undefined") {
@@ -27,16 +27,10 @@ export const setupWeb3 = async (state, dispatch) => {
 const connectWeb3 = async () => {
   // setup web3
   const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
-
-  let account = null;
-  try {
-    account = await signer.getAddress();
-  } catch (error) {}
 
   // get chain settings
   const network = await provider.getNetwork();
-  const { name, allowed } = chainSettings(network.chainId);
+  const { networkName, allowed } = chainSettings(network.chainId);
 
   // update the state
   return {
@@ -45,7 +39,7 @@ const connectWeb3 = async () => {
     provider: provider,
     chainId: network.chainId,
     account: account,
-    name: name,
+    networkName: networkName,
     allowed: allowed,
   };
 };
@@ -62,37 +56,37 @@ const chainSettings = (chainId) => {
   switch (chainId) {
     case 1:
       return {
-        name: "Mainnet",
+        networkName: "Mainnet",
         allowed: false,
       };
     case 2:
       return {
-        name: "Morden",
+        networkName: "Morden",
         allowed: false,
       };
     case 3:
       return {
-        name: "Ropsten",
-        allowed: true,
+        networkName: "Ropsten",
+        allowed: false,
       };
     case 4:
       return {
-        name: "Rinkeby",
+        networkName: "Rinkeby",
         allowed: false,
       };
     case 5:
       return {
-        name: "Goerli",
+        networkName: "Goerli",
         allowed: false,
       };
     case 42:
       return {
-        name: "Kovan",
+        networkName: "Kovan",
         allowed: false,
       };
     default:
       return {
-        name: "Private network",
+        networkName: "Private network",
         allowed: true,
       };
   }

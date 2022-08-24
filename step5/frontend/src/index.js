@@ -1,6 +1,5 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import App from "./App";
+import { createRoot } from "react-dom/client";
 import { StoreProvider } from "context/StoreProvider";
 import { initialState, web3Reducer } from "context/web3Reducer";
 

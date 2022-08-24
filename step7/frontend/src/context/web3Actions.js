@@ -6,6 +6,7 @@ import {
   GET_ARTICLE,
   ARTICLE_SAVED,
 } from "context/web3Types";
+import settings from "settings";
 
 export const setupWeb3 = async (state, dispatch) => {
   if (typeof window.ethereum !== "undefined") {
