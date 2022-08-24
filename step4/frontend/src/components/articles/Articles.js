@@ -1,34 +1,9 @@
 import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import Fab from "@material-ui/core/Fab";
-import AddIcon from "@material-ui/icons/Add";
+import { Container, Grid, Fab } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 import ArticleDialog from "./ArticleDialog";
 import ArticleCard from "./ArticleCard";
 
-// define the styles of our component
-const useStyles = makeStyles((theme) => ({
-	cardGrid: {
-		paddingTop: theme.spacing(8),
-		paddingBottom: theme.spacing(8),
-	},
-	fab: {
-		position: "fixed",
-		bottom: theme.spacing(2),
-		right: theme.spacing(3),
-	},
-	box: {
-		height: 100,
-		display: "flex",
-		border: "0px solid black",
-		padding: 8,
-	},
-	container: {
-		display: "flex",
-		justifyContent: "center",
-	},
-}));
 
 const Articles = () => {
 	const classes = useStyles();

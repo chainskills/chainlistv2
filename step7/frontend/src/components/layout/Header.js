@@ -1,20 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { AppBar, Toolbar, Typography } from "@mui/material";
 import StorefrontIcon from "@mui/icons-material/Storefront";
-import { useStore } from "context/StoreProvider";
 
 const Header = () => {
-  const [state, dispatch] = useStore();
-
-  useEffect(() => {
-    if (showEventsStatus) {
-      showEvents(state, dispatch);
-    } else {
-      hideEvents(state, dispatch);
-    }
-    // eslint-disable-next-line
-  }, [showEventsStatus]);
-
   return (
     <div>
       <AppBar>
