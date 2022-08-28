@@ -1,15 +1,5 @@
-# Basic Sample Hardhat Project
+# ChainList - Backend: Step 3
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
+Link to the ebook "Become a Blockchain Developer with Ethereum and Solidity" available on [Leanpub](https://leanpub.com/blockchain-developer).
 
-Try running some of the following tasks:
-
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-node scripts/sample-script.js
-npx hardhat help
-```
+&copy;ChainSkills 2022 - Sébastien Arbogast / Said Eloudrhiri

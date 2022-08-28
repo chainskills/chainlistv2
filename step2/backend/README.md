@@ -1,4 +1,4 @@
-# ChainList - Step 2
+# ChainList - Backend: Step 2
 
 - Test the smart contract
 

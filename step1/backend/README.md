@@ -1,4 +1,4 @@
-# ChainList - Step 1
+# ChainList - Backend: Step 1
 
 - Create the project with Hardhat
 - Create a basic smart contract for ChainList
