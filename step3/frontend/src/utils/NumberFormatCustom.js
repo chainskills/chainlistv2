@@ -11,7 +11,7 @@ const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(
 	return (
 		<NumberFormat
 			{...other}
-			getInputRef={inputRef}
+			getInputRef={ref}
 			onValueChange={(values) => {
 				onChange({
 					target: {
@@ -24,10 +24,9 @@ const NumberFormatCustom = React.forwardRef(function NumberFormatCustom(
 			isNumericString
 		/>
 	);
-};
+});
 
 NumberFormatCustom.propTypes = {
-	inputRef: PropTypes.func.isRequired,
 	name: PropTypes.string.isRequired,
 	onChange: PropTypes.func.isRequired,
 };

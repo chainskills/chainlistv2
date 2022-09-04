@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 import Header from "components/layout/Header";
 import Hero from "components/layout/Hero";
