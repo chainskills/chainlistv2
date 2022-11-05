@@ -24,12 +24,12 @@ const MARKETPLACE = 0;
 const MY_ARTICLES = 1;
 
 const Articles = () => {
-	const [state, dispatch] = useStore(MY_ARTICLES);
+	const [state, dispatch] = useStore();
 
 	// flag used to display or hide the modal dialog box
 	const [isOpen, setIsOpen] = useState(false);
 
-	const [selectedTab, setSelectedTab] = useState(MARKETPLACE);
+	const [selectedTab, setSelectedTab] = useState(MY_ARTICLES);
 
 	const handleChangeSelector = async (event, newSelection) => {
 		setSelectedTab(newSelection);
