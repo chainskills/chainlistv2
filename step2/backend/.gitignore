@@ -1,11 +1,17 @@
 node_modules
-coverage
-coverage.json
-typechain
+.env
 
-#Hardhat files
-cache
-artifacts
+# Hardhat files
+/cache
+/artifacts
+
+# TypeChain files
+/typechain
+/typechain-types
+
+# solidity-coverage files
+/coverage
+/coverage.json
 
 #Other files
 .DS_Store
