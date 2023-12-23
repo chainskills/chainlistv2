@@ -11,9 +11,9 @@ async function main() {
   const ChainList = await hre.ethers.getContractFactory("ChainList");
   const chainList = await ChainList.deploy();
 
-  await chainList.deployed();
+  await chainList.waitForDeployment();
 
-  console.log("ChainList deployed to:", chainList.address);
+  console.log("ChainList deployed to:", chainList.target);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
