@@ -7,14 +7,14 @@ import theme from "components/layout/theme";
 
 
 const App = () => {
-	return (
-		<ThemeProvider theme={theme}>
-			<CssBaseline />
-			<Header />
-			<Hero />
-			<Articles />
-		</ThemeProvider>
-	);
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Header />
+      <Hero />
+      <Articles />
+    </ThemeProvider>
+  );
 };
 
 export default App;

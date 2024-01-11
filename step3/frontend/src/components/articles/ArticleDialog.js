@@ -15,19 +15,19 @@ const ArticleDialog = ({
   handleCloseDialog,
   handleSaveDialog,
 }) => {
-  // state variable used to kee the information about the article
+  // state variable for information about the article to create
   const [article, setArticle] = useState({
     name: "",
     description: "",
     price: "0",
   });
 
-  // state variable used to display error messages
-  const [errorName, setErrorName] = useState(false);
-  const [errorDescription, setErrorDescription] = useState(false);
-  const [errorPrice, setErrorPrice] = useState(false);
+  // state variables for error flags
+  const [nameError, setNameError] = useState(false);
+  const [descriptionError, setDescriptionError] = useState(false);
+  const [priceError, setPriceError] = useState(false);
 
-  // function called each time we change a value
+  // function called each time we change one of the fields in the form
   const onChange = (e) => {
     setArticle({
       ...article,
@@ -35,47 +35,41 @@ const ArticleDialog = ({
     });
   };
 
-  // function called when we click on the Save button
+  // function called when we click the Save button
   const handleSave = () => {
     let error = false;
 
-    setErrorName(false);
+    setNameError(false);
     if (article.name === "") {
       error = true;
-      setErrorName(true);
+      setNameError(true);
     }
 
-    setErrorDescription(false);
+    setDescriptionError(false);
     if (article.description === "") {
       error = true;
-      setErrorDescription(true);
+      setDescriptionError(true);
     }
 
-    setErrorPrice(false);
+    setPriceError(false);
     if (Number(article.price) === 0) {
       error = true;
-      setErrorPrice(true);
+      setPriceError(true);
     }
-
     if (!error) {
-      handleCloseDialog(false);
+      handleCloseDialog();
       handleSaveDialog(article);
     }
   };
 
-  // called when we cancel changes
-  const handleCancel = () => {
-    handleCloseDialog(false);
-  };
-
   return (
     <div>
-      <Dialog open={isDialogOpened} onClose={handleCancel}>
+      <Dialog open={isDialogOpened} onClose={handleCloseDialog}>
         <DialogTitle>Article</DialogTitle>
         <DialogContent>
           <TextField
-            error={errorName}
-            helperText={errorName ? "A name is required" : ""}
+            error={nameError}
+            helperText={nameError ? "A name is required" : ""}
             autoFocus
             margin="dense"
             name="name"
@@ -86,8 +80,8 @@ const ArticleDialog = ({
             onChange={onChange}
           />
           <TextField
-            error={errorDescription}
-            helperText={errorDescription ? "A description is required" : ""}
+            error={descriptionError}
+            helperText={descriptionError ? "A description is required" : ""}
             margin="dense"
             name="description"
             value={article.description}
@@ -97,9 +91,9 @@ const ArticleDialog = ({
             onChange={onChange}
           />
           <TextField
-            error={errorPrice}
+            error={priceError}
             helperText={
-              errorPrice ? "The price must be greater than 0 ETH" : ""
+              priceError ? "The price must be greater than 0 ETH" : ""
             }
             label="Price in ETH"
             value={article.price}
@@ -112,7 +106,7 @@ const ArticleDialog = ({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCancel} color="primary">
+          <Button onClick={handleCloseDialog} color="primary">
             Cancel
           </Button>
           <Button onClick={handleSave} color="primary">
